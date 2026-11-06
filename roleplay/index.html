@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../favicon.png">
+    <title>Conversa com o Mars - [US] digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Poppins:wght@100;200;300;400;600;700&family=Raleway:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scrollbar-width: thin; scrollbar-color: rgba(34,34,34,0.22) transparent; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background-color: rgba(34,34,34,0.22); border-radius: 3px; }
+
+        html, body { width: 100%; overflow-x: hidden; }
+        body {
+            background-color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: -0.05em;
+            min-height: 100vh;
+            color: #222222;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* TOPBAR */
+        .topbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 14px 20px; position: relative; z-index: 20;
+            flex-shrink: 0;
+        }
+        .logo-title-row { display: flex; align-items: center; gap: 8px; }
+        .logo-title {
+            font-family: 'Poppins', sans-serif; font-weight: 700;
+            letter-spacing: -0.05em; font-size: 22px; color: #c20000; line-height: 1;
+        }
+        .speech-balao { width: 30px; height: auto; }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-family: 'Poppins', sans-serif; font-weight: 500;
+            font-size: 12px; color: #c20000; text-decoration: none;
+            border: 1px solid #c20000; border-radius: 20px;
+            padding: 7px 14px;
+            background: transparent;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+        }
+        .back-link:hover {
+            background-color: #c20000; color: #ffffff; transform: translateX(-2px);
+        }
+        .back-link svg {
+            width: 12px; height: 12px; stroke: currentColor; stroke-width: 2;
+            fill: none; stroke-linecap: round; stroke-linejoin: round;
+        }
+
+        /* PALCO PRINCIPAL */
+        .stage {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px 20px;
+            position: relative;
+            overflow: hidden;
+            gap: 18px;
+        }
+        .stage::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 80vmax; height: 80vmax;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(194,0,0,0.08) 0%, transparent 60%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: auraBreath 9s ease-in-out infinite;
+        }
+        @keyframes auraBreath {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50%      { transform: translate(-50%, -50%) scale(1.12); }
+        }
+        .stage > * { position: relative; z-index: 1; }
+
+        /* TELAS */
+        .screen {
+            width: 100%;
+            max-width: 640px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+            animation: screenFadeIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+        .screen.active { display: flex; }
+        @keyframes screenFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* HOME E TÓPICOS */
+        .home-robot {
+            width: 180px; height: 180px;
+            object-fit: contain;
+            filter: drop-shadow(0 20px 40px rgba(194,0,0,0.28));
+            animation: robotFloat 4.5s ease-in-out infinite;
+        }
+        @keyframes robotFloat {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50%      { transform: translateY(-12px) rotate(2deg); }
+        }
+        .home-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700; font-size: 24px;
+            color: #222222; text-align: center;
+            letter-spacing: -0.04em; line-height: 1.2;
+            max-width: 420px;
+        }
+        .home-subtitle {
+            font-family: 'Gochi Hand', cursive;
+            letter-spacing: normal; font-size: 17px;
+            color: #555555; text-align: center;
+            max-width: 380px; line-height: 1.4;
+            margin-top: -12px;
+        }
+
+        .topics-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700; font-size: 22px;
+            color: #222222; text-align: center;
+            letter-spacing: -0.03em;
+        }
+        .topics-subtitle {
+            font-family: 'Gochi Hand', cursive;
+            letter-spacing: normal; font-size: 15px;
+            color: #666666; text-align: center;
+            margin-top: -8px;
+        }
+        .topics-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            width: 100%;
+            margin-top: 8px;
+        }
+        .topic-card {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+            background: #ffffff;
+            border: 1.5px solid rgba(34,34,34,0.08);
+            border-radius: 16px;
+            padding: 18px 16px;
+            cursor: pointer;
+            text-align: left;
+            transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .topic-card::before {
+            content: '';
+            position: absolute;
+            left: 16px; right: 16px; bottom: 0;
+            height: 3px;
+            background: #c20000;
+            border-radius: 3px 3px 0 0;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.45s cubic-bezier(0.22,1,0.36,1);
+        }
+        .topic-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(194,0,0,0.12);
+            border-color: rgba(194,0,0,0.2);
+        }
+        .topic-card:hover::before { transform: scaleX(1); }
+        .topic-card-dot { width: 8px; height: 8px; border-radius: 50%; background: #c20000; margin-bottom: 8px; flex-shrink: 0; }
+        .topic-card-title { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 15px; color: #222222; letter-spacing: -0.02em; }
+        .topic-card-desc { font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 11px; color: #777777; letter-spacing: 0; line-height: 1.4; }
+
+        /* ============================================================
+           PALCO FIXO DA CONVERSA
+           ============================================================ */
+        .fixed-stage {
+            width: 100%;
+            max-width: 640px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+
+        .mars-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 16px;
+            width: 100%;
+        }
+        .bubble-wrap {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            flex: 1;
+            justify-content: flex-end;
+            flex-direction: column;
+        }
+        
+        .bubble-content-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            justify-content: flex-end;
+        }
+
+        .sound-waves {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            height: 28px;
+            width: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: width 0.3s ease, opacity 0.3s ease;
+            flex-shrink: 0;
+        }
+        .sound-waves.active { width: 34px; opacity: 1; }
+        .sound-waves span {
+            display: block;
+            width: 3px; height: 8px;
+            background: #c20000;
+            border-radius: 2px;
+            transform-origin: center;
+        }
+        .sound-waves.active span { animation: waveBounce 0.9s ease-in-out infinite; }
+        .sound-waves.active span:nth-child(1) { animation-delay: 0s;   height: 10px; }
+        .sound-waves.active span:nth-child(2) { animation-delay: 0.15s; height: 18px; }
+        .sound-waves.active span:nth-child(3) { animation-delay: 0.3s;  height: 24px; }
+        .sound-waves.active span:nth-child(4) { animation-delay: 0.15s; height: 18px; }
+        .sound-waves.active span:nth-child(5) { animation-delay: 0s;   height: 10px; }
+        @keyframes waveBounce {
+            0%, 100% { transform: scaleY(0.5); opacity: 0.6; }
+            50%      { transform: scaleY(1);   opacity: 1; }
+        }
+
+        .mars-bubble {
+            background: #ffffff;
+            border: 1.5px solid #222222;
+            border-radius: 18px;
+            padding: 14px 20px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 17px;
+            line-height: 1.55;
+            letter-spacing: 0.01em;
+            color: #222222;
+            text-align: left;
+            box-shadow: 4px 4px 0 rgba(34,34,34,0.12);
+            position: relative;
+            min-height: 60px;
+            max-width: 320px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .mars-bubble::after {
+            content: '';
+            position: absolute;
+            top: 50%; right: -8px;
+            transform: translateY(-50%) rotate(45deg);
+            width: 14px; height: 14px;
+            background: #ffffff;
+            border-right: 1.5px solid #222222;
+            border-top: 1.5px solid #222222;
+        }
+        
+        .bubble-text {
+            display: block;
+            white-space: pre-wrap;
+        }
+
+        .translation-btn {
+            display: none;
+            align-items: center;
+            gap: 4px;
+            background: transparent;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 11px;
+            color: #999999;
+            cursor: pointer;
+            margin-top: 4px;
+            padding: 2px 6px;
+            transition: color 0.2s ease;
+            align-self: flex-end;
+        }
+        .translation-btn:hover { color: #c20000; }
+        .translation-btn svg {
+            width: 12px; height: 12px;
+            stroke: currentColor; stroke-width: 2;
+            fill: none; stroke-linecap: round; stroke-linejoin: round;
+        }
+        .translation-btn.visible { display: inline-flex; }
+
+        .mars-translation {
+            display: none;
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px dashed rgba(34,34,34,0.18);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 1.45;
+            letter-spacing: 0;
+            color: #777777;
+            text-align: left;
+        }
+        .mars-translation.visible { display: block; }
+
+        .robot-img {
+            width: 100px; height: 100px;
+            object-fit: contain;
+            filter: drop-shadow(0 12px 24px rgba(194,0,0,0.22));
+            animation: robotFloat 4.5s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        .replay-wrap {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            margin-top: -6px;
+            flex-wrap: wrap;
+        }
+        .replay-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: transparent;
+            border: 1px solid rgba(34,34,34,0.15);
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 11px;
+            color: #666666;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        .replay-btn:hover {
+            background: rgba(194,0,0,0.06);
+            color: #c20000;
+            border-color: rgba(194,0,0,0.3);
+        }
+        .replay-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .replay-btn svg {
+            width: 12px; height: 12px;
+            stroke: currentColor; stroke-width: 2;
+            fill: none; stroke-linecap: round; stroke-linejoin: round;
+        }
+
+        /* ============================================================
+           SLIDES DINÂMICOS
+           ============================================================ */
+        .conversation-container {
+            width: 100%;
+            max-width: 640px;
+            position: relative;
+            min-height: 140px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .slide-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s ease;
+            pointer-events: none;
+        }
+
+        .slide-section.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+            position: relative;
+        }
+
+        .slide-section.exit-left {
+            transform: translateX(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* CAIXA DO ALUNO */
+        .user-box {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 14px 16px;
+            background: #f7f7f7;
+            border-radius: 16px;
+            border: 2px dashed rgba(194,0,0,0.22);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(16px);
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+        }
+        .user-box.visible { 
+            opacity: 1; 
+            visibility: visible;
+            transform: translateY(0); 
+        }
+        
+        .user-text-col {
+            display: flex; flex-direction: column; gap: 4px;
+            flex: 1; min-width: 0;
+        }
+        .user-prompt {
+            font-family: 'Poppins', sans-serif; font-weight: 600;
+            font-size: 10px; letter-spacing: 0.2em;
+            text-transform: uppercase; color: #c20000;
+        }
+        .user-phrase {
+            font-family: 'Poppins', sans-serif; font-weight: 700;
+            font-size: 18px; color: #222222;
+            letter-spacing: -0.03em; line-height: 1.3;
+            overflow-wrap: break-word;
+        }
+        .mic-label {
+            font-family: 'Poppins', sans-serif; font-weight: 500;
+            font-size: 11px; color: #666666;
+            letter-spacing: 0.01em; line-height: 1.45;
+            min-height: 1.2em;
+        }
+
+        .result-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 4px;
+            min-height: 24px;
+            flex-wrap: wrap;
+        }
+
+        .match-tag {
+            display: none;
+            align-items: center;
+            gap: 4px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            width: fit-content;
+            letter-spacing: 0.02em;
+        }
+        .match-tag.visible { display: inline-flex; }
+        .match-tag.good { background: rgba(10,122,10,0.1); color: #0a7a0a; }
+        .match-tag.bad { background: rgba(194,96,0,0.1); color: #c26000; }
+        .match-tag.neutral { background: rgba(34,34,34,0.06); color: #666666; }
+
+        .continue-btn {
+            display: none;
+            align-items: center;
+            gap: 4px;
+            background: #ffffff;
+            border: 1.5px solid #c20000;
+            color: #c20000;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 11px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 2px 2px 0 rgba(194,0,0,0.15);
+        }
+        .continue-btn.visible { display: inline-flex; }
+        .continue-btn:hover { background: #c20000; color: #ffffff; }
+        .continue-btn:active { transform: translateY(2px) translateX(2px); box-shadow: 0 0 0 rgba(0,0,0,0); }
+
+        .instruction-hint {
+            font-family: 'Poppins', sans-serif;
+            font-size: 10px;
+            color: #999999;
+            text-align: center;
+            margin-top: 8px;
+            width: 100%;
+            font-weight: 400;
+            letter-spacing: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s;
+        }
+        .instruction-hint.visible { opacity: 1; visibility: visible; }
+
+        /* ============================================================
+           BOTÃO PULAR (FIXO EMBAIXO DO CARD)
+           ============================================================ */
+        .skip-wrap {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 4px 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s;
+        }
+        .skip-wrap.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .skip-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: transparent;
+            border: 1px solid rgba(34,34,34,0.15);
+            border-radius: 20px;
+            padding: 6px 16px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 11px;
+            color: #999999;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+            letter-spacing: 0.02em;
+        }
+        .skip-btn:hover {
+            background: rgba(34,34,34,0.04);
+            color: #555555;
+            border-color: rgba(34,34,34,0.3);
+        }
+        .skip-btn svg {
+            width: 12px; height: 12px;
+            stroke: currentColor; stroke-width: 2;
+            fill: none; stroke-linecap: round; stroke-linejoin: round;
+        }
+
+        /* MICROFONE */
+        .mic-btn {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: #c20000;
+            border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 8px 20px rgba(194,0,0,0.4);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+            flex-shrink: 0;
+        }
+        .mic-btn:hover:not(:disabled) {
+            transform: scale(1.06);
+            background: #a30000;
+            box-shadow: 0 10px 26px rgba(194,0,0,0.55);
+        }
+        .mic-btn:active:not(:disabled) { transform: scale(0.95); }
+        .mic-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .mic-btn svg {
+            width: 24px; height: 24px;
+            stroke: #ffffff; stroke-width: 2;
+            fill: none; stroke-linecap: round; stroke-linejoin: round;
+        }
+        
+        .mic-waves {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            height: 24px;
+        }
+        .mic-waves span {
+            display: block;
+            width: 3px;
+            height: 8px;
+            background: #c20000;
+            border-radius: 2px;
+            transform-origin: center;
+        }
+        
+        .mic-btn.listening {
+            background: #ffc2b8;
+            animation: micPulseSoft 1.2s ease-in-out infinite;
+            box-shadow: 0 8px 20px rgba(255,194,184,0.4);
+        }
+        .mic-btn.listening:hover {
+            background: #ffb0a3;
+            box-shadow: 0 10px 26px rgba(255,194,184,0.55);
+        }
+        .mic-btn.listening .mic-icon { display: none; }
+        .mic-btn.listening .mic-waves { display: flex; }
+        .mic-btn.listening .mic-waves span {
+            animation: waveBounce 0.9s ease-in-out infinite;
+            background: #c20000;
+        }
+        .mic-btn.listening .mic-waves span:nth-child(1) { animation-delay: 0s;   height: 8px; }
+        .mic-btn.listening .mic-waves span:nth-child(2) { animation-delay: 0.15s; height: 14px; }
+        .mic-btn.listening .mic-waves span:nth-child(3) { animation-delay: 0.3s;  height: 20px; }
+        .mic-btn.listening .mic-waves span:nth-child(4) { animation-delay: 0.15s; height: 14px; }
+        .mic-btn.listening .mic-waves span:nth-child(5) { animation-delay: 0s;   height: 8px; }
+
+        @keyframes micPulseSoft {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,194,184, 0.6); }
+            50%      { box-shadow: 0 0 0 16px rgba(255,194,184, 0); }
+        }
+
+        /* TELA FINAL */
+        .final-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            width: 100%;
+            text-align: center;
+            padding-top: 10px;
+        }
+        .feedback-box {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 18px;
+            border-radius: 16px;
+            position: relative;
+        }
+        .feedback-box.success {
+            background: #f0faf0;
+            border: 1.5px solid rgba(0,160,0,0.25);
+        }
+        .feedback-box.neutral {
+            background: #fafafa;
+            border: 1.5px solid rgba(34,34,34,0.15);
+        }
+        .feedback-icon {
+            width: 40px; height: 40px;
+            flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+        }
+        .feedback-box.success .feedback-icon { background: rgba(10,122,10,0.1); }
+        .feedback-box.neutral .feedback-icon { background: rgba(34,34,34,0.06); }
+        .feedback-icon svg {
+            width: 22px; height: 22px;
+            fill: none; stroke-width: 2.5;
+            stroke-linecap: round; stroke-linejoin: round;
+        }
+        .feedback-box.success .feedback-icon svg { stroke: #0a7a0a; }
+        .feedback-box.neutral .feedback-icon svg { stroke: #666666; }
+        .feedback-text-col {
+            display: flex; flex-direction: column; gap: 2px;
+            flex: 1; min-width: 0;
+            text-align: left;
+        }
+        .feedback-title {
+            font-family: 'Poppins', sans-serif; font-weight: 700;
+            font-size: 16px; letter-spacing: -0.02em;
+        }
+        .feedback-box.success .feedback-title { color: #0a7a0a; }
+        .feedback-box.neutral .feedback-title { color: #444444; }
+        .feedback-desc {
+            font-family: 'Poppins', sans-serif; font-weight: 400;
+            font-size: 12px; color: #555555; line-height: 1.4;
+        }
+        .feedback-score {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-left: auto;
+            padding-left: 12px;
+            min-width: 60px;
+        }
+        .feedback-box.success .feedback-score { border-left: 1px solid rgba(10,122,10,0.18); }
+        .feedback-box.neutral .feedback-score { border-left: 1px solid rgba(34,34,34,0.1); }
+        .feedback-score-value {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+            color: #c20000;
+            letter-spacing: -0.04em;
+            line-height: 1;
+        }
+        .feedback-box.neutral .feedback-score-value {
+            font-size: 13px;
+            color: #999999;
+            letter-spacing: 0;
+        }
+        .feedback-score-label {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 9px;
+            color: #666666;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-top: 3px;
+            white-space: nowrap;
+        }
+
+        /* BOTÕES DE AÇÃO (REDUZIDOS) */
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background-color: #c20000;
+            color: #ffffff;
+            font-family: 'Gochi Hand', cursive;
+            font-weight: 400; 
+            font-size: 15px;
+            letter-spacing: 0.02em;
+            padding: 0 20px;
+            height: 42px;
+            border: 2px solid #222222;
+            border-radius: 12px;
+            cursor: pointer; 
+            text-decoration: none;
+            box-shadow: 2px 3px 0 rgba(34,34,34,0.85);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
+        }
+        .action-btn:hover {
+            background-color: #a30000;
+            transform: translateY(1px) translateX(1px);
+            box-shadow: 1px 2px 0 rgba(34,34,34,0.85);
+        }
+        .action-btn:active { 
+            transform: translateY(3px) translateX(2px);
+            box-shadow: 0px 0px 0 rgba(34,34,34,0.85);
+        }
+        .action-btn svg {
+            width: 14px; height: 14px;
+            stroke: #ffffff; stroke-width: 2;
+            fill: none; stroke-linecap: round; stroke-linejoin: round;
+        }
+        .action-btn.ghost {
+            background: #ffffff;
+            color: #c20000;
+            border: 2px solid #c20000;
+            box-shadow: 2px 3px 0 rgba(194,0,0,0.25);
+        }
+        .action-btn.ghost:hover { background: #fff5f5; }
+
+        .final-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        /* ESTADOS */
+        .state-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            text-align: center;
+            padding: 20px;
+            max-width: 420px;
+        }
+        .state-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400; font-size: 13px;
+            color: #666666; line-height: 1.5;
+        }
+        .spinner {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            border: 3px solid rgba(194,0,0,0.15);
+            border-top-color: #c20000;
+            animation: spinnerRotate 0.9s linear infinite;
+        }
+        @keyframes spinnerRotate { to { transform: rotate(360deg); } }
+
+        /* AVISO */
+        .compat-warning {
+            display: none;
+            background: #fff8f0;
+            border: 1px solid rgba(255,140,0,0.3);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin: 0 20px 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            color: #8a5a00;
+            line-height: 1.5;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .compat-warning.visible { display: block; }
+
+        /* FOOTER */
+        footer {
+            width: 100%;
+            text-align: center;
+            padding: 14px 20px 16px;
+            flex-shrink: 0;
+        }
+        .footer-text {
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: -0.05em;
+            font-weight: 400; font-size: 11px;
+            color: #666666;
+        }
+        .footer-link {
+            color: #c20000;
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            transition: color 0.25s ease;
+        }
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            left: 0; bottom: -2px;
+            width: 100%; height: 1px;
+            background-color: currentColor;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+        }
+        .footer-link:hover { color: #a30000; }
+        .footer-link:hover::after { transform: scaleX(1); transform-origin: left; }
+
+        /* DESKTOP */
+        @media (min-width: 768px) {
+            .topbar { padding: 22px 60px; }
+            .logo-title { font-size: 30px; }
+            .speech-balao { width: 42px; }
+            .back-link { font-size: 14px; padding: 9px 20px; gap: 10px; }
+            .back-link svg { width: 14px; height: 14px; }
+
+            .stage { padding: 5px 60px 40px; gap: 24px; }
+            .screen, .conversation-container, .fixed-stage { max-width: 760px; gap: 22px; }
+
+            .home-robot { width: 260px; height: 260px; }
+            .home-title { font-size: 40px; max-width: 640px; }
+            .home-subtitle { font-size: 22px; max-width: 540px; margin-top: -12px; }
+
+            .topics-title { font-size: 32px; }
+            .topics-subtitle { font-size: 18px; margin-top: -12px; }
+            .topics-list { grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 16px; }
+            .topic-card { padding: 24px 22px; border-radius: 18px; gap: 8px; }
+            .topic-card-dot { width: 10px; height: 10px; margin-bottom: 10px; }
+            .topic-card-title { font-size: 18px; }
+            .topic-card-desc { font-size: 13px; }
+
+            .mars-row { gap: 28px; }
+            .robot-img { width: 180px; height: 180px; }
+            .mars-bubble {
+                font-size: 22px;
+                line-height: 1.55;
+                padding: 20px 26px;
+                max-width: 520px;
+                border-radius: 20px;
+                min-height: 80px;
+            }
+            .mars-translation { font-size: 15px; margin-top: 12px; padding-top: 10px; }
+            .translation-btn { font-size: 13px; margin-top: 6px; }
+
+            .replay-wrap { gap: 10px; margin-top: -12px; }
+            .replay-btn { font-size: 13px; padding: 7px 16px; gap: 8px; }
+            .replay-btn svg { width: 14px; height: 14px; }
+
+            .user-box {
+                padding: 18px 22px;
+                gap: 20px;
+                border-radius: 18px;
+            }
+            .user-prompt { font-size: 11px; }
+            .user-phrase { font-size: 22px; }
+            .mic-label { font-size: 12px; }
+            .mic-btn { width: 70px; height: 70px; }
+            .mic-btn svg { width: 30px; height: 30px; }
+            .mic-waves { height: 30px; gap: 4px; }
+            .mic-waves span { width: 4px; }
+            .mic-btn.listening .mic-waves span:nth-child(1) { height: 10px; }
+            .mic-btn.listening .mic-waves span:nth-child(2) { height: 18px; }
+            .mic-btn.listening .mic-waves span:nth-child(3) { height: 24px; }
+            .mic-btn.listening .mic-waves span:nth-child(4) { height: 18px; }
+            .mic-btn.listening .mic-waves span:nth-child(5) { height: 10px; }
+
+            .skip-btn { font-size: 12px; padding: 7px 18px; }
+            .skip-btn svg { width: 13px; height: 13px; }
+
+            .match-tag { font-size: 11px; padding: 4px 10px; }
+            .continue-btn { font-size: 12px; padding: 5px 14px; border-radius: 12px; }
+            .instruction-hint { font-size: 11px; margin-top: 4px; }
+
+            .feedback-box { padding: 20px 22px; gap: 14px; }
+            .feedback-icon { width: 46px; height: 46px; }
+            .feedback-icon svg { width: 24px; height: 24px; }
+            .feedback-title { font-size: 17px; }
+            .feedback-desc { font-size: 13px; }
+            .feedback-score { padding-left: 16px; min-width: 70px; }
+            .feedback-score-value { font-size: 22px; }
+            .feedback-score-label { font-size: 9px; }
+
+            .action-btn { font-size: 17px; height: 46px; padding: 0 24px; }
+            .action-btn svg { width: 16px; height: 16px; }
+
+            footer { padding: 10px 60px 28px; }
+            .footer-text { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="topbar">
+        <div class="logo-title-row">
+            <span class="logo-title">Us.digital</span>
+            <img src="../assets/balao.png" alt="Balão de fala" class="speech-balao">
+        </div>
+        <button class="back-link" id="backBtn">
+            <svg viewBox="0 0 24 24">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span id="backLabel">Voltar</span>
+        </button>
+    </div>
+
+    <div class="compat-warning" id="compatWarning">
+        Seu navegador não suporta reconhecimento de voz. Para uma melhor experiência, use o <strong>Chrome</strong> ou <strong>Edge</strong> no computador ou Android.
+    </div>
+
+    <main class="stage">
+
+        <!-- HOME -->
+        <section class="screen active" id="screenHome">
+            <img src="../assets/mars.png" alt="Mars, o robô" class="home-robot">
+            <h1 class="home-title">Pratique com o Mars</h1>
+            <p class="home-subtitle">Escolha um assunto e treine com nosso assistente.</p>
+            <button class="action-btn" id="seeTopicsBtn">
+                Ver tópicos
+                <svg viewBox="0 0 24 24">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </button>
+        </section>
+
+        <!-- TÓPICOS -->
+        <section class="screen" id="screenTopics">
+            <h2 class="topics-title">Escolha um tópico</h2>
+            <p class="topics-subtitle">Cada tópico é uma conversa curta com o Mars.</p>
+            <div class="topics-list" id="topicsList"></div>
+        </section>
+
+        <!-- CONVERSA -->
+        <section class="screen" id="screenConversation">
+            
+            <div class="fixed-stage">
+                <div class="mars-row">
+                    <div class="bubble-wrap">
+                        <div class="bubble-content-row">
+                            <div class="sound-waves" id="fixedSoundWaves" aria-hidden="true">
+                                <span></span><span></span><span></span><span></span><span></span>
+                            </div>
+                            <div class="mars-bubble" id="fixedMarsBubble">
+                                <span class="bubble-text" id="fixedBubbleText"></span>
+                                <span class="mars-translation" id="fixedTranslation"></span>
+                            </div>
+                        </div>
+                        <button class="translation-btn" id="fixedTranslationBtn">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            Ver tradução
+                        </button>
+                    </div>
+                    <img src="../assets/mars.png" alt="Mars, o robô" class="robot-img">
+                </div>
+
+                <div class="replay-wrap">
+                    <button class="replay-btn" id="fixedReplayBtn">
+                        <svg viewBox="0 0 24 24">
+                            <polyline points="1 4 1 10 7 10"></polyline>
+                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                        </svg>
+                        Ouvir novamente
+                    </button>
+                    <button class="replay-btn" id="fixedSlowBtn">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Ouvir devagar
+                    </button>
+                </div>
+            </div>
+
+            <div class="conversation-container" id="conversationContainer"></div>
+
+            <!-- BOTÃO PULAR (FIXO ABAIXO DO CARD) -->
+            <div class="skip-wrap" id="skipWrap">
+                <button class="skip-btn" id="skipBtn">
+                    Pular pergunta
+                    <svg viewBox="0 0 24 24">
+                        <polyline points="5 4 15 12 5 20"></polyline>
+                        <line x1="19" y1="5" x2="19" y2="19"></line>
+                    </svg>
+                </button>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p class="footer-text">
+            Feito pela professora · 
+            <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="footer-link">@dicarvalho.prof</a>
+        </p>
+    </footer>
+
+    <script>
+        /* ============================================================
+           SFX — PLACEHOLDERS
+           ============================================================ */
+        const SFX_START    = 'https://res.cloudinary.com/dbwqwgbtx/video/upload/v1793884904/universfield-notification-beep-229154_v6nw9r.mp3';
+        const SFX_CLICK    = 'https://res.cloudinary.com/dbwqwgbtx/video/upload/v1793834548/freesound_community-camera-manual-click-39929_ebukss.mp3';
+        const SFX_ERROR    = 'https://res.cloudinary.com/dbwqwgbtx/video/upload/v1780093488/47313572-ui-sounds-pack-2-sound-8-358892_swimko.mp3';
+        const SFX_FEEDBACK = 'https://res.cloudinary.com/dbwqwgbtx/video/upload/v1793885071/universfield-level-up-06-370051_xrt57z.mp3';
+
+        const sfxCache = {};
+        function preloadSfx(name, url) {
+            if (!url || url.startsWith('CLOUDINARY_URL')) return;
+            const audio = new Audio(url);
+            audio.preload = 'auto';
+            sfxCache[name] = audio;
+        }
+        preloadSfx('start', SFX_START);
+        preloadSfx('click', SFX_CLICK);
+        preloadSfx('error', SFX_ERROR);
+        preloadSfx('feedback', SFX_FEEDBACK);
+
+        function playSfx(name) {
+            const audio = sfxCache[name];
+            if (!audio) return;
+            try { audio.currentTime = 0; audio.play().catch(() => {}); } catch (e) {}
+        }
+
+        /* ============================================================
+           ESTADO
+           ============================================================ */
+        let currentTurn = 0;
+        let isListening = false;
+        let recognition = null;
+        let synth = window.speechSynthesis;
+        let marsVoice = null;
+        let currentScript = [];
+        let topicsList = [];
+        
+        let totalUserTurns = 0;
+        let correctUserTurns = 0;
+        
+        let typingInterval = null;
+
+        /* ============================================================
+           ELEMENTOS FIXOS
+           ============================================================ */
+        const fixedMarsBubble = document.getElementById('fixedMarsBubble');
+        const fixedBubbleText = document.getElementById('fixedBubbleText');
+        const fixedTranslation = document.getElementById('fixedTranslation');
+        const fixedTranslationBtn = document.getElementById('fixedTranslationBtn');
+        const fixedSoundWaves = document.getElementById('fixedSoundWaves');
+        const fixedReplayBtn = document.getElementById('fixedReplayBtn');
+        const fixedSlowBtn = document.getElementById('fixedSlowBtn');
+
+        const screenHome = document.getElementById('screenHome');
+        const screenTopics = document.getElementById('screenTopics');
+        const screenConversation = document.getElementById('screenConversation');
+        const topicsListEl = document.getElementById('topicsList');
+        const backBtn = document.getElementById('backBtn');
+        const backLabel = document.getElementById('backLabel');
+        const conversationContainer = document.getElementById('conversationContainer');
+        const skipWrap = document.getElementById('skipWrap');
+        const skipBtn = document.getElementById('skipBtn');
+
+        const compatWarning = document.getElementById('compatWarning');
+        const seeTopicsBtn = document.getElementById('seeTopicsBtn');
+
+        /* ============================================================
+           COMPATIBILIDADE
+           ============================================================ */
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) compatWarning.classList.add('visible');
+
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.continuous = true;
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+        }
+
+        /* ============================================================
+           VOZ DO MARS (TTS)
+           ============================================================ */
+        function loadVoices() {
+            const voices = synth.getVoices();
+            marsVoice = voices.find(v => v.lang.startsWith('en')) || voices[0];
+        }
+        if (synth) {
+            if (synth.getVoices().length) loadVoices();
+            else synth.onvoiceschanged = loadVoices;
+        }
+
+        function speakPure(text, callback, rate) {
+            if (!synth) { if (callback) callback(); return; }
+            synth.cancel();
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'en-US';
+            u.rate = (typeof rate === 'number') ? rate : 0.9;
+            u.pitch = 1.1;
+            if (marsVoice) u.voice = marsVoice;
+
+            u.onend = () => { if (callback) callback(); };
+            u.onerror = () => { if (callback) callback(); };
+            
+            synth.speak(u);
+        }
+
+        function typeWriterEffect(text, onComplete) {
+            if (typingInterval) clearInterval(typingInterval);
+            
+            fixedBubbleText.textContent = '';
+            let i = 0;
+            const speed = Math.max(20, 1000 / 15); 
+
+            typingInterval = setInterval(() => {
+                if (i < text.length) {
+                    fixedBubbleText.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typingInterval);
+                    typingInterval = null;
+                    if (onComplete) onComplete();
+                }
+            }, speed);
+        }
+
+        /* ============================================================
+           NAVEGAÇÃO ENTRE TELAS
+           ============================================================ */
+        function showScreen(name) {
+            [screenHome, screenTopics, screenConversation].forEach(s => s.classList.remove('active'));
+            if (name === 'home') {
+                screenHome.classList.add('active');
+                backLabel.textContent = 'Voltar ao site';
+                backBtn.onclick = () => { window.location.href = './'; };
+            } else if (name === 'topics') {
+                screenTopics.classList.add('active');
+                backLabel.textContent = 'Início';
+                backBtn.onclick = () => { playSfx('click'); showScreen('home'); };
+            } else if (name === 'conversation') {
+                screenConversation.classList.add('active');
+                backLabel.textContent = 'Tópicos';
+                backBtn.onclick = () => {
+                    playSfx('click');
+                    if (synth) synth.cancel();
+                    if (typingInterval) clearInterval(typingInterval);
+                    if (recognition && isListening) {
+                        try { recognition.abort(); } catch (e) {}
+                    }
+                    isListening = false;
+                    showScreen('topics');
+                };
+            }
+        }
+
+        /* ============================================================
+           CARREGAR LISTA DE TÓPICOS
+           ============================================================ */
+        async function loadTopics() {
+            try {
+                const res = await fetch('conversas/index.json', { cache: 'no-store' });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                topicsList = await res.json();
+                renderTopics();
+            } catch (err) {
+                console.warn('Não foi possível carregar conversas/index.json:', err);
+                topicsListEl.innerHTML = `
+                    <div class="state-box" style="grid-column: 1 / -1;">
+                        <p class="state-text">
+                            Não consegui carregar a lista de tópicos.<br>
+        
+                        </p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderTopics() {
+            topicsListEl.innerHTML = '';
+            topicsList.forEach(topic => {
+                const card = document.createElement('button');
+                card.className = 'topic-card';
+                card.type = 'button';
+                card.innerHTML = `
+                    <div class="topic-card-dot"></div>
+                    <div class="topic-card-title"></div>
+                    <div class="topic-card-desc"></div>
+                `;
+                card.querySelector('.topic-card-title').textContent = topic.title;
+                card.querySelector('.topic-card-desc').textContent = topic.description || 'Conversa curta';
+                card.addEventListener('click', () => {
+            playSfx('click');
+            if (topic.redirect) {
+                window.location.href = topic.redirect;
+            } else {
+                openTopic(topic);
+            }
+        });
+                topicsListEl.appendChild(card);
+            });
+        }
+
+        /* ============================================================
+           PARSER DO .txt
+           ============================================================ */
+        function parseScript(text) {
+            const lines = text.split(/\r?\n/);
+            const turns = [];
+            let current = null;
+
+            for (let raw of lines) {
+                const line = raw.trim();
+                if (!line) continue;
+                const m = line.match(/^#\s*(mars|aluno|dica|traducao|tradução)\s*:\s*(.+)$/i);
+                if (!m) continue;
+                const tag = m[1].toLowerCase();
+                let value = m[2].trim();
+                value = value.replace(/^["'“”]+|["'“”]+$/g, '').trim();
+
+                if (tag === 'mars') {
+                    if (current && current.mars) turns.push(current);
+                    current = { mars: value, userExpected: null, userHint: null, translation: null };
+                } else if (tag === 'aluno') {
+                    if (current) current.userExpected = value;
+                } else if (tag === 'dica') {
+                    if (current) current.userHint = value;
+                } else if (tag === 'traducao' || tag === 'tradução') {
+                    if (current) current.translation = value;
+                }
+            }
+            if (current && current.mars) turns.push(current);
+            return turns;
+        }
+
+        /* ============================================================
+           CARREGAR TÓPICO
+           ============================================================ */
+           async function openTopic(topic) {
+            // Se for um card de redirecionamento (ex: Conversa Livre), não tenta carregar txt
+            if (topic.redirect) return; 
+
+            showScreen('conversation');
+            skipWrap.classList.remove('visible');
+            conversationContainer.innerHTML = `
+                <div class="state-box">
+                    <div class="spinner"></div>
+                    <p class="state-text">Carregando conversa...</p>
+                </div>
+            `;
+            
+            fixedBubbleText.textContent = '...';
+            fixedTranslation.textContent = '';
+            fixedTranslation.classList.remove('visible');
+            fixedTranslationBtn.classList.remove('visible');
+            
+            currentTurn = 0;
+            totalUserTurns = 0;
+            correctUserTurns = 0;
+
+            try {
+                const res = await fetch(`conversas/${topic.file}`, { cache: 'no-store' });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const text = await res.text();
+                currentScript = parseScript(text);
+                if (!currentScript.length) throw new Error('Roteiro vazio');
+                
+                playSfx('start');
+                renderSlides();
+
+            } catch (err) {
+                console.warn('Erro ao carregar roteiro:', err);
+                conversationContainer.innerHTML = `
+                    <div class="state-box">
+                        <p class="state-text">
+                            Não foi possível carregar a conversa <strong>${topic.title}</strong>. Já estamos cientes do problema e será resolvido em breve.<br>
+                            
+                        </p>
+                    </div>
+                `;
+            }
+        }
+
+        /* ============================================================
+           RENDERIZAR OS SLIDES
+           ============================================================ */
+        function renderSlides() {
+            conversationContainer.innerHTML = '';
+            
+            currentScript.forEach((turn, index) => {
+                const section = document.createElement('div');
+                section.className = 'slide-section';
+                section.id = `slide-${index}`;
+                section.innerHTML = `
+                    <div class="dynamic-content" style="display:flex; flex-direction:column; align-items:center; gap:12px; width:100%;"></div>
+                `;
+                conversationContainer.appendChild(section);
+            });
+
+            const finalSection = document.createElement('div');
+            finalSection.className = 'slide-section';
+            finalSection.id = 'slide-final';
+            finalSection.innerHTML = `
+                <div class="final-screen">
+                    <div class="feedback-box" id="finalFeedbackBox">
+                        <div class="feedback-icon" id="finalFeedbackIcon">
+                            <svg viewBox="0 0 24 24">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="feedback-text-col">
+                            <div class="feedback-title" id="finalFeedbackTitle">Great job!</div>
+                            <div class="feedback-desc" id="finalFeedbackDesc">Você completou a conversa com o Mars. Continue praticando todos os dias!</div>
+                        </div>
+                        <div class="feedback-score" id="finalFeedbackScore">
+                            <span class="feedback-score-value" id="finalScoreValue">0%</span>
+                            <span class="feedback-score-label" id="finalScoreLabel">de acerto</span>
+                        </div>
+                    </div>
+                    <div class="final-buttons">
+                        <button class="action-btn" id="restartBtn">Praticar novamente</button>
+                        <button class="action-btn ghost" id="topicsBtn">Outro tópico</button>
+                    </div>
+                </div>
+            `;
+            conversationContainer.appendChild(finalSection);
+
+            goToSlide(0);
+        }
+
+        /* ============================================================
+           TRANSIÇÃO DE SLIDES
+           ============================================================ */
+        function goToSlide(index) {
+            const sections = document.querySelectorAll('.slide-section');
+            
+            sections.forEach(s => {
+                if (s.classList.contains('active')) {
+                    s.classList.remove('active');
+                    s.classList.add('exit-left');
+                }
+            });
+
+            // Tela final
+            if (index >= currentScript.length) {
+                skipWrap.classList.remove('visible');
+                const finalSection = document.getElementById('slide-final');
+                finalSection.classList.remove('exit-left');
+                finalSection.classList.add('active');
+                
+                const box = document.getElementById('finalFeedbackBox');
+                const title = document.getElementById('finalFeedbackTitle');
+                const desc = document.getElementById('finalFeedbackDesc');
+                const scoreValue = document.getElementById('finalScoreValue');
+                const scoreLabel = document.getElementById('finalScoreLabel');
+                
+                if (totalUserTurns === 0) {
+                    box.classList.remove('success');
+                    box.classList.add('neutral');
+                    title.textContent = 'Exercícios não realizados';
+                    desc.textContent = 'Faça os exercícios para saber seu feedback!';
+                    scoreValue.textContent = '—';
+                    scoreLabel.textContent = 'sem dados';
+                } else {
+                    const percent = Math.round((correctUserTurns / totalUserTurns) * 100);
+                    box.classList.remove('neutral');
+                    box.classList.add('success');
+                    title.textContent = 'Great job!';
+                    desc.textContent = 'Você completou a conversa com o Mars. Continue praticando todos os dias!';
+                    scoreValue.textContent = percent + '%';
+                    scoreLabel.textContent = 'de acerto';
+                }
+                
+                playSfx('feedback');
+                
+                document.getElementById('restartBtn').onclick = () => {
+                    playSfx('click');
+                    currentTurn = 0;
+                    totalUserTurns = 0;
+                    correctUserTurns = 0;
+                    renderSlides();
+                };
+                document.getElementById('topicsBtn').onclick = () => {
+                    playSfx('click');
+                    showScreen('topics');
+                };
+                return;
+            }
+
+            // Slide com fala do Mars
+            const currentSection = document.getElementById('slide-' + index);
+            currentSection.classList.remove('exit-left');
+            currentSection.classList.add('active');
+            
+            // Esconde o botão Pular até a caixa do aluno aparecer
+            skipWrap.classList.remove('visible');
+            
+            const turn = currentScript[index];
+            
+            fixedBubbleText.textContent = '';
+            fixedTranslation.textContent = turn.translation || '';
+            fixedTranslation.classList.remove('visible');
+            
+            if (turn.translation) {
+                fixedTranslationBtn.classList.add('visible');
+                fixedTranslationBtn.innerHTML = `
+                    <svg viewBox="0 0 24 24">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    Ver tradução
+                `;
+                fixedTranslationBtn.onclick = () => {
+                    fixedTranslation.classList.toggle('visible');
+                    const isVisible = fixedTranslation.classList.contains('visible');
+                    fixedTranslationBtn.innerHTML = isVisible ? `
+                        <svg viewBox="0 0 24 24">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                        Ocultar tradução
+                    ` : `
+                        <svg viewBox="0 0 24 24">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        Ver tradução
+                    `;
+                };
+            } else {
+                fixedTranslationBtn.classList.remove('visible');
+            }
+
+            fixedSoundWaves.classList.add('active');
+            typeWriterEffect(turn.mars);
+
+            speakPure(turn.mars, () => {
+                fixedSoundWaves.classList.remove('active');
+                fixedBubbleText.textContent = turn.mars;
+                if (typingInterval) {
+                    clearInterval(typingInterval);
+                    typingInterval = null;
+                }
+
+                if (turn.userExpected) {
+                    showUserInput(turn, currentSection);
+                } else {
+                    currentTurn++;
+                    goToSlide(currentTurn);
+                }
+            });
+        }
+
+        /* ============================================================
+           CAIXA DO ALUNO
+           ============================================================ */
+        function showUserInput(turn, section) {
+            const dynamicContent = section.querySelector('.dynamic-content');
+            dynamicContent.innerHTML = '';
+
+            const userBox = document.createElement('div');
+            userBox.className = 'user-box';
+
+            const textCol = document.createElement('div');
+            textCol.className = 'user-text-col';
+
+            const prompt = document.createElement('div');
+            prompt.className = 'user-prompt';
+            prompt.textContent = 'Sua vez de falar';
+
+            const phrase = document.createElement('div');
+            phrase.className = 'user-phrase';
+            phrase.textContent = turn.userExpected;
+
+            const micLabel = document.createElement('div');
+            micLabel.className = 'mic-label';
+            micLabel.textContent = turn.userHint || 'Toque no microfone e repita a frase.';
+
+            const resultRow = document.createElement('div');
+            resultRow.className = 'result-row';
+
+            const matchTag = document.createElement('div');
+            matchTag.className = 'match-tag';
+
+            const continueBtn = document.createElement('button');
+            continueBtn.className = 'continue-btn';
+            continueBtn.innerHTML = 'Continuar &rarr;';
+
+            resultRow.appendChild(matchTag);
+            resultRow.appendChild(continueBtn);
+
+            const instructionHint = document.createElement('div');
+            instructionHint.className = 'instruction-hint';
+            instructionHint.textContent = 'Clique no microfone para iniciar e clique novamente para parar.';
+
+            textCol.appendChild(prompt);
+            textCol.appendChild(phrase);
+            textCol.appendChild(micLabel);
+            textCol.appendChild(resultRow);
+
+            const micBtn = document.createElement('button');
+            micBtn.className = 'mic-btn';
+            micBtn.setAttribute('aria-label', 'Gravar sua voz');
+            
+            micBtn.innerHTML = `
+                <svg class="mic-icon" viewBox="0 0 24 24">
+                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    <line x1="12" y1="19" x2="12" y2="23"></line>
+                    <line x1="8" y1="23" x2="16" y2="23"></line>
+                </svg>
+                <div class="mic-waves">
+                    <span></span><span></span><span></span><span></span><span></span>
+                </div>
+            `;
+
+            userBox.appendChild(textCol);
+            userBox.appendChild(micBtn);
+            
+            const wrapper = document.createElement('div');
+            wrapper.style.width = '100%';
+            wrapper.appendChild(userBox);
+            wrapper.appendChild(instructionHint);
+            
+            dynamicContent.appendChild(wrapper);
+
+            requestAnimationFrame(() => {
+                userBox.classList.add('visible');
+                instructionHint.classList.add('visible');
+                skipWrap.classList.add('visible');
+            });
+
+            // Reseta o botão Pular para o estado ativo
+            skipBtn.disabled = false;
+            skipBtn.style.opacity = '1';
+            skipBtn.style.pointerEvents = 'auto';
+            skipBtn.onclick = () => {
+                playSfx('click');
+                micBtn.disabled = true;
+                skipBtn.disabled = true;
+                skipBtn.style.opacity = '0.4';
+                skipBtn.style.pointerEvents = 'none';
+                
+                matchTag.textContent = 'Exercício pulado';
+                matchTag.className = 'match-tag visible neutral';
+                
+                micLabel.textContent = 'Você pulou esta pergunta.';
+                micLabel.style.color = '#666666';
+                
+                continueBtn.classList.add('visible');
+            };
+
+            micBtn.addEventListener('click', () => toggleListening(turn, micBtn, micLabel, matchTag, continueBtn));
+            continueBtn.addEventListener('click', () => {
+                playSfx('click');
+                userBox.classList.remove('visible');
+                instructionHint.classList.remove('visible');
+                skipWrap.classList.remove('visible');
+                currentTurn++;
+                goToSlide(currentTurn);
+            });
+        }
+
+        /* ============================================================
+           RECONHECIMENTO DE VOZ
+           ============================================================ */
+        function toggleListening(turn, micBtn, micLabel, matchTag, continueBtn) {
+            if (!recognition) {
+                micLabel.textContent = 'Reconhecimento de voz indisponível neste navegador.';
+                return;
+            }
+
+            if (isListening) {
+                try { recognition.stop(); } catch(e){}
+                micBtn.classList.remove('listening');
+                return;
+            }
+
+            playSfx('click');
+            isListening = true;
+            micBtn.classList.add('listening');
+            micLabel.textContent = 'Ouvindo... fale e clique no microfone para parar.';
+            micLabel.style.color = '';
+            matchTag.className = 'match-tag'; 
+            continueBtn.classList.remove('visible');
+
+            let finalTranscript = '';
+
+            recognition.onresult = (event) => {
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript + ' ';
+                    }
+                }
+            };
+
+            recognition.onerror = () => {
+                isListening = false;
+                micBtn.classList.remove('listening');
+                playSfx('error');
+                micLabel.textContent = 'Não consegui ouvir. Tente novamente.';
+                micLabel.style.color = '#c26000';
+                setTimeout(() => {
+                    micLabel.style.color = '';
+                    micLabel.textContent = turn.userHint || 'Toque no microfone e repita a frase.';
+                }, 2000);
+            };
+
+            recognition.onend = () => {
+                if (isListening) {
+                    isListening = false;
+                    micBtn.classList.remove('listening');
+                    
+                    const transcript = finalTranscript.trim();
+                    
+                    if (!transcript) {
+                        micLabel.textContent = 'Nada foi capturado. Tente novamente.';
+                        return;
+                    }
+
+                    processTranscript(transcript, turn, micLabel, matchTag, continueBtn);
+                }
+            };
+
+            try { recognition.start(); }
+            catch (e) {
+                isListening = false;
+                micBtn.classList.remove('listening');
+                micLabel.textContent = 'Erro ao iniciar microfone. Verifique as permissões.';
+            }
+        }
+
+        function processTranscript(transcript, turn, micLabel, matchTag, continueBtn) {
+            const normalize = (s) => s.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ').trim();
+            const expected = normalize(turn.userExpected);
+            const said = normalize(transcript);
+            const words = expected.split(' ');
+            const saidWords = said.split(' ');
+            let matches = 0;
+            words.forEach(w => { if (saidWords.includes(w)) matches++; });
+            const accuracy = matches / words.length;
+            const percent = Math.round(accuracy * 100);
+            
+            totalUserTurns++;
+
+            matchTag.classList.add('visible');
+            if (accuracy >= 0.6) {
+                correctUserTurns++;
+                matchTag.textContent = `${percent}% de acerto`;
+                matchTag.classList.add('good');
+                playSfx('feedback');
+                micLabel.textContent = `Eu ouvi: "${transcript}"`;
+                micLabel.style.color = '#0a7a0a';
+            } else {
+                matchTag.textContent = `${percent}% de acerto`;
+                matchTag.classList.add('bad');
+                playSfx('error');
+                micLabel.textContent = `Eu ouvi: "${transcript}"`;
+                micLabel.style.color = '#c26000';
+            }
+
+            continueBtn.classList.add('visible');
+        }
+
+        /* ============================================================
+           BOTÕES DE ÁUDIO FIXOS
+           ============================================================ */
+        fixedReplayBtn.addEventListener('click', () => {
+            playSfx('click');
+            if (currentTurn < currentScript.length) {
+                const turn = currentScript[currentTurn];
+                fixedSoundWaves.classList.add('active');
+                typeWriterEffect(turn.mars);
+                speakPure(turn.mars, () => {
+                    fixedSoundWaves.classList.remove('active');
+                    fixedBubbleText.textContent = turn.mars;
+                    if (typingInterval) clearInterval(typingInterval);
+                }, 0.9);
+            }
+        });
+
+        fixedSlowBtn.addEventListener('click', () => {
+            playSfx('click');
+            if (currentTurn < currentScript.length) {
+                const turn = currentScript[currentTurn];
+                fixedSoundWaves.classList.add('active');
+                typeWriterEffect(turn.mars);
+                speakPure(turn.mars, () => {
+                    fixedSoundWaves.classList.remove('active');
+                    fixedBubbleText.textContent = turn.mars;
+                    if (typingInterval) clearInterval(typingInterval);
+                }, 0.55);
+            }
+        });
+
+        seeTopicsBtn.addEventListener('click', () => {
+            playSfx('click');
+            showScreen('topics');
+            if (topicsList.length === 0) loadTopics();
+        });
+
+        /* Inicialização */
+        window.addEventListener('load', () => {
+            showScreen('home');
+        });
+    </script>
+</body>
+</html>
