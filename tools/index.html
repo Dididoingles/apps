@@ -170,6 +170,8 @@
             padding: 16px 12px 12px;
             gap: 8px;
             overflow: hidden;
+            text-decoration: none;
+            color: inherit;
             transition:
                 transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
                 box-shadow 0.4s ease,
@@ -256,209 +258,6 @@
         }
 
         /* ============================================================
-           OVERLAY DETALHE
-           ============================================================ */
-        .overlay {
-            position: fixed; inset: 0; z-index: 100;
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; visibility: hidden;
-            transition: opacity 0.55s ease, visibility 0.55s ease;
-        }
-        .overlay.active { opacity: 1; visibility: visible; }
-
-        .overlay-backdrop {
-            position: absolute; inset: 0;
-            background: rgba(6, 6, 8, 0.82);
-            backdrop-filter: blur(26px) saturate(140%);
-            -webkit-backdrop-filter: blur(26px) saturate(140%);
-            overflow: hidden;
-        }
-        .overlay-aura {
-            position: absolute;
-            width: 70vmax; height: 70vmax;
-            border-radius: 50%;
-            filter: blur(90px);
-            opacity: 0.55;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            transition: background 0.6s ease;
-            pointer-events: none;
-            animation: auraBreath 9s ease-in-out infinite;
-        }
-        .overlay-aura.secondary {
-            width: 45vmax; height: 45vmax;
-            opacity: 0.35;
-            filter: blur(110px);
-            animation-delay: -3s;
-            animation-duration: 11s;
-        }
-        .overlay-grain {
-            position: absolute; inset: 0;
-            background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
-            background-size: 3px 3px;
-            opacity: 0.35;
-            mix-blend-mode: overlay;
-            pointer-events: none;
-        }
-
-        .overlay-content {
-            position: relative; z-index: 2;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            gap: 24px; padding: 24px 20px;
-            perspective: 1400px;
-            width: 100%; max-width: 1100px;
-        }
-
-        .floating-card-wrapper {
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.18s ease-out;
-            will-change: transform;
-            flex-shrink: 0;
-            animation: cardFloat 5.5s ease-in-out infinite;
-        }
-        @keyframes cardFloat {
-            0%, 100% { transform: translateY(0); }
-            50%      { transform: translateY(-10px); }
-        }
-
-        .floating-card-wrapper::before {
-            content: '';
-            position: absolute;
-            inset: -30px;
-            border-radius: 30px;
-            background: var(--aura-color, #c20000);
-            opacity: 0.35;
-            filter: blur(40px);
-            z-index: -1;
-            transition: background 0.5s ease;
-            animation: haloPulse 3.2s ease-in-out infinite;
-        }
-        @keyframes haloPulse {
-            0%, 100% { opacity: 0.25; transform: scale(0.98); }
-            50%      { opacity: 0.5;  transform: scale(1.04); }
-        }
-
-        .detail-card {
-            width: 220px;
-            height: 220px;
-            border-radius: 22px;
-            background: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            padding: 20px;
-            box-shadow:
-                0 30px 60px rgba(0,0,0,0.55),
-                0 12px 24px rgba(0,0,0,0.35),
-                inset 0 1px 0 rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.08);
-            animation: cardPopIn 0.75s cubic-bezier(0.22,1,0.36,1) forwards;
-        }
-        @keyframes cardPopIn {
-            0%   { transform: scale(0.55) translateZ(-120px) rotateX(15deg); opacity: 0; }
-            100% { transform: scale(1) translateZ(0) rotateX(0deg); opacity: 1; }
-        }
-        .detail-card-art {
-            width: 62%;
-            aspect-ratio: 1 / 1;
-            object-fit: contain;
-            filter: drop-shadow(0 10px 20px var(--aura-shadow, rgba(0,0,0,0.3)));
-        }
-        .detail-card-name {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 700;
-            font-size: 15px;
-            color: #222222;
-            letter-spacing: -0.03em;
-            text-align: center;
-            line-height: 1.15;
-        }
-
-        .overlay-info {
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            gap: 16px; text-align: center;
-            padding: 0 16px; max-width: 480px;
-            opacity: 0; transform: translateY(24px);
-            transition: opacity 0.6s ease 0.35s, transform 0.6s ease 0.35s;
-        }
-        .overlay.active .overlay-info {
-            opacity: 1; transform: translateY(0);
-        }
-
-        .overlay-kicker {
-            display: inline-flex; align-items: center; gap: 10px;
-            font-family: 'Poppins', sans-serif; font-weight: 600;
-            font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
-            color: rgba(255,255,255,0.55);
-        }
-        .overlay-kicker::before, .overlay-kicker::after {
-            content: ''; width: 22px; height: 1px;
-            background: rgba(255,255,255,0.35);
-        }
-        .overlay-title {
-            font-family: 'Poppins', sans-serif; font-weight: 700;
-            font-size: 26px; color: #ffffff;
-            letter-spacing: -0.04em; line-height: 1.05;
-        }
-        .overlay-description {
-            font-family: 'Poppins', sans-serif; font-weight: 300;
-            font-size: 14px; color: rgba(255,255,255,0.85);
-            letter-spacing: -0.01em; line-height: 1.6;
-        }
-        .start-btn {
-            display: inline-flex; align-items: center; justify-content: center;
-            gap: 12px; background-color: #c20000; color: #ffffff;
-            font-family: 'Poppins', sans-serif; font-weight: 700;
-            font-size: 15px; letter-spacing: 0.04em;
-            padding: 0 30px; height: 50px;
-            border: none; border-radius: 14px; cursor: pointer;
-            text-decoration: none;
-            position: relative; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(194,0,0,0.45);
-            transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
-            animation: btnGlow 2.6s ease-in-out infinite;
-        }
-        @keyframes btnGlow {
-            0%, 100% { box-shadow: 0 10px 30px rgba(194,0,0,0.4); }
-            50%      { box-shadow: 0 14px 40px rgba(194,0,0,0.65); }
-        }
-        .start-btn::before {
-            content: '';
-            position: absolute; inset: 0;
-            background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%);
-            transform: translateX(-120%);
-            transition: transform 0.7s ease;
-        }
-        .start-btn:hover::before { transform: translateX(120%); }
-        .start-btn:hover {
-            background-color: #a30000;
-            transform: translateY(-3px) scale(1.03);
-        }
-        .start-btn:active { transform: translateY(0) scale(0.98); }
-        .start-btn svg {
-            width: 18px; height: 18px; stroke: #ffffff; stroke-width: 2;
-            fill: none; display: block; transition: transform 0.25s ease;
-        }
-        .start-btn:hover svg { transform: translateX(5px); }
-
-        .close-overlay {
-            position: absolute; top: 14px; right: 14px;
-            width: 38px; height: 38px; padding: 0; line-height: 1; border-radius: 50%;
-            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18);
-            color: #ffffff; font-size: 14px; font-weight: 200;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; z-index: 10;
-            transition: background 0.25s ease, transform 0.25s ease;
-            backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-        }
-        .close-overlay:hover { background: rgba(255,255,255,0.22); transform: rotate(90deg); }
-
-        /* ============================================================
            FOOTER
            ============================================================ */
         footer {
@@ -518,24 +317,6 @@
             .tool-card-art { width: 64%; max-width: 150px; }
             .tool-card-name { font-size: 15px; }
 
-            .overlay-content {
-                flex-direction: row; gap: 80px;
-                padding: 20px;
-            }
-            .detail-card { width: 300px; height: 300px; padding: 28px; gap: 16px; }
-            .detail-card-art { width: 60%; }
-            .detail-card-name { font-size: 20px; }
-
-            .overlay-info {
-                align-items: flex-start; text-align: left;
-                padding: 0; max-width: 520px; gap: 20px;
-            }
-            .overlay-title { font-size: 48px; }
-            .overlay-description { font-size: 17px; max-width: 460px; }
-            .start-btn { font-size: 17px; height: 56px; padding: 0 36px; }
-
-            .close-overlay { top: 32px; right: 32px; width: 44px; height: 44px; font-size: 16px; }
-
             footer { padding: 50px 60px 40px; }
             .footer-text { font-size: 13px; }
             .footer-ig svg { width: 16px; height: 16px; }
@@ -567,7 +348,7 @@
     <section class="page-hero">
         <span class="page-kicker">Todas as ferramentas</span>
         <h1 class="page-title">Tudo o que você precisa para praticar <span class="accent">de graça</span></h1>
-        <p class="page-subtitle">Toque em uma ferramenta para saber mais sobre ela.</p>
+        <p class="page-subtitle">Toque em uma ferramenta para saber mais.</p>
     </section>
 
     <section class="tools-section">
@@ -590,39 +371,6 @@
             </a>
         </p>
     </footer>
-
-    <!-- OVERLAY -->
-    <div class="overlay" id="overlay">
-        <div class="overlay-backdrop" id="overlayBackdrop">
-            <div class="overlay-aura" id="overlayAura"></div>
-            <div class="overlay-aura secondary" id="overlayAuraSecondary"></div>
-            <div class="overlay-grain"></div>
-        </div>
-
-        <button class="close-overlay" id="closeOverlay" aria-label="Fechar">&#10005;</button>
-
-        <div class="overlay-content">
-            <div class="floating-card-wrapper" id="floatingCardWrapper">
-                <div class="detail-card" id="detailCard">
-                    <img src="" alt="" class="detail-card-art" id="detailCardArt">
-                    <div class="detail-card-name" id="detailCardName"></div>
-                </div>
-            </div>
-
-            <div class="overlay-info">
-                <span class="overlay-kicker">Ferramenta gratuita</span>
-                <h3 class="overlay-title" id="overlayTitle"></h3>
-                <p class="overlay-description" id="overlayDescription"></p>
-                <a href="#" target="_blank" rel="noopener noreferrer" class="start-btn" id="startBtn">
-                    Acessar ferramenta
-                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                        <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
-                </a>
-            </div>
-        </div>
-    </div>
 
     <script>
         /* ============================================================
@@ -654,15 +402,14 @@
                 link: 'https://dididoingles.github.io/youlisten/',
                 color: '#4a4a4a', auraShadow: 'rgba(35, 35, 35, 0.35)'
             },
-
             {
-                art: '../assets/mars.png', title: 'Conversation wheel',
+                art: '../assets/wheel.png', title: 'Conversation wheel',
                 description: 'Uma roleta de temas de conversação em inglês com 3 níveis.',
                 link: 'https://dididoingles.github.io/conversationwheel/',
                 color: '#c20000', auraShadow: 'rgba(120, 0, 0, 0.35)'
             },
             {
-                art: '../assets/mars.png', title: 'Stop!',
+                art: '../assets/stop.png', title: 'Stop!',
                 description: 'Um joguinho dinâmico de stop para estimular o vocabulário em Inglês.',
                 link: 'https://dididoingles.github.io/stopgame/',
                 color: '#5a5a5a', auraShadow: 'rgba(40, 40, 40, 0.35)'
@@ -687,13 +434,15 @@
         const toolsGrid = document.getElementById('toolsGrid');
 
         toolsData.forEach((tool, i) => {
-            const card = document.createElement('button');
-            card.type = 'button';
+            const card = document.createElement('a');
             card.className = 'tool-card';
+            card.href = tool.link;
+            card.target = '_blank';
+            card.rel = 'noopener noreferrer';
             card.style.setProperty('--aura', tool.color);
             card.style.setProperty('--aura-shadow', tool.auraShadow);
             card.style.animationDelay = (i * 0.06) + 's';
-            card.setAttribute('aria-label', 'Abrir detalhes de ' + tool.title);
+            card.setAttribute('aria-label', 'Abrir ' + tool.title);
 
             const art = document.createElement('img');
             art.src = tool.art;
@@ -708,81 +457,7 @@
             card.appendChild(art);
             card.appendChild(name);
 
-            card.addEventListener('click', () => openOverlay(i));
-
             toolsGrid.appendChild(card);
-        });
-
-        /* ============================================================
-           OVERLAY
-           ============================================================ */
-        const overlay = document.getElementById('overlay');
-        const overlayBackdrop = document.getElementById('overlayBackdrop');
-        const closeOverlayBtn = document.getElementById('closeOverlay');
-        const detailCard = document.getElementById('detailCard');
-        const detailCardArt = document.getElementById('detailCardArt');
-        const detailCardName = document.getElementById('detailCardName');
-        const floatingCardWrapper = document.getElementById('floatingCardWrapper');
-        const overlayTitle = document.getElementById('overlayTitle');
-        const overlayDescription = document.getElementById('overlayDescription');
-        const overlayAura = document.getElementById('overlayAura');
-        const overlayAuraSecondary = document.getElementById('overlayAuraSecondary');
-        const startBtn = document.getElementById('startBtn');
-
-        let isOverlayOpen = false;
-        let mouseMoveHandler = null;
-
-        function openOverlay(index) {
-            const tool = toolsData[index];
-            const isGray = ['#2b2b2b', '#4a4a4a', '#5a5a5a'].includes(tool.color);
-            const auraColor = isGray ? '#8a8a8a' : tool.color;
-
-            detailCardArt.src = tool.art;
-            detailCardArt.alt = tool.title;
-            detailCardName.textContent = tool.title;
-            overlayTitle.textContent = tool.title;
-            overlayDescription.textContent = tool.description;
-            startBtn.href = tool.link;
-            detailCard.style.setProperty('--aura-shadow', tool.auraShadow);
-
-            overlayAura.style.background = `radial-gradient(circle, ${auraColor} 0%, transparent 70%)`;
-            overlayAuraSecondary.style.background = `radial-gradient(circle, ${auraColor} 0%, transparent 70%)`;
-            floatingCardWrapper.style.setProperty('--aura-color', auraColor);
-
-            overlay.classList.add('active');
-            isOverlayOpen = true;
-
-            floatingCardWrapper.style.transform = 'rotateX(0deg) rotateY(0deg)';
-            mouseMoveHandler = handleMouseMove;
-            document.addEventListener('mousemove', mouseMoveHandler);
-        }
-
-        function closeOverlay() {
-            overlay.classList.remove('active');
-            isOverlayOpen = false;
-            if (mouseMoveHandler) {
-                document.removeEventListener('mousemove', mouseMoveHandler);
-                mouseMoveHandler = null;
-            }
-            floatingCardWrapper.style.transform = 'rotateX(0deg) rotateY(0deg)';
-        }
-
-        function handleMouseMove(e) {
-            if (!isOverlayOpen) return;
-            const cx = window.innerWidth / 2;
-            const cy = window.innerHeight / 2;
-            const dx = (e.clientX - cx) / cx;
-            const dy = (e.clientY - cy) / cy;
-            const max = 10;
-            floatingCardWrapper.style.transform =
-                `rotateX(${-dy * max}deg) rotateY(${dx * max}deg)`;
-        }
-
-        if (overlayBackdrop) overlayBackdrop.addEventListener('click', closeOverlay);
-        if (closeOverlayBtn) closeOverlayBtn.addEventListener('click', closeOverlay);
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && isOverlayOpen) closeOverlay();
         });
 
         /* ============================================================
