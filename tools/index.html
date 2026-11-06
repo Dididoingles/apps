@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../favicon.png">
+    <title>Todas as ferramentas - [US] digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Poppins:wght@100;200;300;400;600;700&family=Raleway:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scrollbar-width: thin; scrollbar-color: rgba(34,34,34,0.22) transparent; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background-color: rgba(34,34,34,0.22); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background-color: rgba(34,34,34,0.45); }
+
+        html, body { width: 100%; overflow-x: hidden; }
+        body {
+            background-color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: -0.05em;
+            min-height: 100vh;
+            color: #222222;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ============================================================
+           LOADER
+           ============================================================ */
+        .loader-screen {
+            position: fixed; inset: 0; background-color: #ffffff;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 24px; z-index: 9999;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        .loader-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader-text {
+            font-family: 'Gochi Hand', cursive; letter-spacing: normal; font-size: 20px;
+            color: #222222; opacity: 0; animation: loaderTextFade 0.8s ease-out 0.2s forwards;
+            text-align: center; padding: 0 24px;
+        }
+        @keyframes loaderTextFade {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 0.75; transform: translateY(0); }
+        }
+        .loader-spinner {
+            width: 48px; height: 48px; border-radius: 50%;
+            border: 3px solid rgba(194,0,0,0.15); border-top-color: #c20000;
+            animation: spinnerRotate 0.9s linear infinite;
+        }
+        @keyframes spinnerRotate { to { transform: rotate(360deg); } }
+
+        /* ============================================================
+           TOPBAR
+           ============================================================ */
+        .topbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 20px; position: relative; z-index: 20;
+        }
+        .logo-title-row { display: flex; align-items: center; gap: 8px; }
+        .logo-title {
+            font-family: 'Poppins', sans-serif; font-weight: 700;
+            letter-spacing: -0.05em; font-size: 22px; color: #c20000; line-height: 1;
+        }
+        .speech-balao { width: 30px; height: auto; }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-family: 'Poppins', sans-serif; font-weight: 500;
+            font-size: 12px; color: #c20000; text-decoration: none;
+            border: 1px solid #c20000; border-radius: 20px;
+            padding: 7px 14px;
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+        }
+        .back-link:hover {
+            background-color: #c20000; color: #ffffff; transform: translateX(-2px);
+        }
+        .back-link svg {
+            width: 12px; height: 12px; stroke: currentColor; stroke-width: 2;
+            fill: none; stroke-linecap: round; stroke-linejoin: round;
+        }
+
+        /* ============================================================
+           HERO CURTO
+           ============================================================ */
+        .page-hero {
+            position: relative;
+            padding: 20px 20px 30px;
+            text-align: center;
+            overflow: hidden;
+        }
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            top: -60%; left: 50%;
+            width: 80vmax; height: 80vmax;
+            transform: translateX(-50%);
+            background: radial-gradient(circle, rgba(194,0,0,0.08) 0%, transparent 60%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: auraBreath 10s ease-in-out infinite;
+        }
+        @keyframes auraBreath {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50%      { transform: translateX(-50%) scale(1.12); }
+        }
+        .page-hero > * { position: relative; z-index: 1; }
+
+        .page-kicker {
+            display: inline-flex; align-items: center; gap: 10px;
+            font-family: 'Poppins', sans-serif; font-weight: 600;
+            font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+            color: #c20000; margin-bottom: 12px;
+        }
+        .page-kicker::before, .page-kicker::after {
+            content: ''; width: 20px; height: 1px; background: currentColor;
+        }
+        .page-title {
+            font-family: 'Poppins', sans-serif; font-weight: 700;
+            font-size: 28px; color: #222222;
+            letter-spacing: -0.05em; line-height: 1.1;
+            margin-bottom: 10px;
+        }
+        .page-title .accent { color: #c20000; }
+        .page-subtitle {
+            font-family: 'Gochi Hand', cursive; letter-spacing: normal;
+            font-size: 16px; color: #555555;
+            max-width: 520px; margin: 0 auto;
+            line-height: 1.4;
+        }
+
+        /* ============================================================
+           GRID DE FERRAMENTAS
+           ============================================================ */
+        .tools-section {
+            flex: 1;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px 16px 40px;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        @media (min-width: 640px) {
+            .tools-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        }
+        @media (min-width: 900px) {
+            .tools-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        }
+
+        /* CARD QUADRADINHO */
+        .tool-card {
+            position: relative;
+            aspect-ratio: 1 / 1;
+            border-radius: 18px;
+            background: #ffffff;
+            border: 1px solid rgba(34,34,34,0.06);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 16px 12px 12px;
+            gap: 8px;
+            overflow: hidden;
+            transition:
+                transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.4s ease,
+                border-color 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px) scale(0.96);
+            animation: cardEnter 0.6s cubic-bezier(0.22,1,0.36,1) forwards;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        @keyframes cardEnter {
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Aura interna na cor do card */
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(circle at 50% 40%, var(--aura, #c20000) 0%, transparent 70%);
+            opacity: 0.06;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        /* Linha decorativa que cresce no hover */
+        .tool-card::after {
+            content: '';
+            position: absolute;
+            left: 16px; right: 16px; bottom: 0;
+            height: 3px;
+            border-radius: 3px 3px 0 0;
+            background: var(--aura, #c20000);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            pointer-events: none;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow:
+                0 20px 40px rgba(0,0,0,0.10),
+                0 8px 16px var(--aura-shadow, rgba(120,0,0,0.15));
+            border-color: rgba(34,34,34,0.02);
+        }
+        .tool-card:hover::before { opacity: 0.16; }
+        .tool-card:hover::after { transform: scaleX(1); }
+
+        .tool-card:active {
+            transform: translateY(-2px) scale(0.99);
+        }
+
+        .tool-card-art {
+            width: 68%;
+            max-width: 120px;
+            aspect-ratio: 1 / 1;
+            object-fit: contain;
+            display: block;
+            flex-shrink: 0;
+            filter: drop-shadow(0 8px 16px var(--aura-shadow, rgba(0,0,0,0.2)));
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .tool-card:hover .tool-card-art {
+            transform: scale(1.08) rotate(-2deg);
+        }
+
+        .tool-card-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            color: #222222;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            text-align: center;
+            width: 100%;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-top: auto;
+            padding-bottom: 2px;
+        }
+
+        /* ============================================================
+           OVERLAY DETALHE
+           ============================================================ */
+        .overlay {
+            position: fixed; inset: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.55s ease, visibility 0.55s ease;
+        }
+        .overlay.active { opacity: 1; visibility: visible; }
+
+        .overlay-backdrop {
+            position: absolute; inset: 0;
+            background: rgba(6, 6, 8, 0.82);
+            backdrop-filter: blur(26px) saturate(140%);
+            -webkit-backdrop-filter: blur(26px) saturate(140%);
+            overflow: hidden;
+        }
+        .overlay-aura {
+            position: absolute;
+            width: 70vmax; height: 70vmax;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.55;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            transition: background 0.6s ease;
+            pointer-events: none;
+            animation: auraBreath 9s ease-in-out infinite;
+        }
+        .overlay-aura.secondary {
+            width: 45vmax; height: 45vmax;
+            opacity: 0.35;
+            filter: blur(110px);
+            animation-delay: -3s;
+            animation-duration: 11s;
+        }
+        .overlay-grain {
+            position: absolute; inset: 0;
+            background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
+            background-size: 3px 3px;
+            opacity: 0.35;
+            mix-blend-mode: overlay;
+            pointer-events: none;
+        }
+
+        .overlay-content {
+            position: relative; z-index: 2;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 24px; padding: 24px 20px;
+            perspective: 1400px;
+            width: 100%; max-width: 1100px;
+        }
+
+        .floating-card-wrapper {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.18s ease-out;
+            will-change: transform;
+            flex-shrink: 0;
+            animation: cardFloat 5.5s ease-in-out infinite;
+        }
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(-10px); }
+        }
+
+        .floating-card-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: -30px;
+            border-radius: 30px;
+            background: var(--aura-color, #c20000);
+            opacity: 0.35;
+            filter: blur(40px);
+            z-index: -1;
+            transition: background 0.5s ease;
+            animation: haloPulse 3.2s ease-in-out infinite;
+        }
+        @keyframes haloPulse {
+            0%, 100% { opacity: 0.25; transform: scale(0.98); }
+            50%      { opacity: 0.5;  transform: scale(1.04); }
+        }
+
+        .detail-card {
+            width: 220px;
+            height: 220px;
+            border-radius: 22px;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 20px;
+            box-shadow:
+                0 30px 60px rgba(0,0,0,0.55),
+                0 12px 24px rgba(0,0,0,0.35),
+                inset 0 1px 0 rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.08);
+            animation: cardPopIn 0.75s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+        @keyframes cardPopIn {
+            0%   { transform: scale(0.55) translateZ(-120px) rotateX(15deg); opacity: 0; }
+            100% { transform: scale(1) translateZ(0) rotateX(0deg); opacity: 1; }
+        }
+        .detail-card-art {
+            width: 62%;
+            aspect-ratio: 1 / 1;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 20px var(--aura-shadow, rgba(0,0,0,0.3)));
+        }
+        .detail-card-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+            color: #222222;
+            letter-spacing: -0.03em;
+            text-align: center;
+            line-height: 1.15;
+        }
+
+        .overlay-info {
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 16px; text-align: center;
+            padding: 0 16px; max-width: 480px;
+            opacity: 0; transform: translateY(24px);
+            transition: opacity 0.6s ease 0.35s, transform 0.6s ease 0.35s;
+        }
+        .overlay.active .overlay-info {
+            opacity: 1; transform: translateY(0);
+        }
+
+        .overlay-kicker {
+            display: inline-flex; align-items: center; gap: 10px;
+            font-family: 'Poppins', sans-serif; font-weight: 600;
+            font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
+            color: rgba(255,255,255,0.55);
+        }
+        .overlay-kicker::before, .overlay-kicker::after {
+            content: ''; width: 22px; height: 1px;
+            background: rgba(255,255,255,0.35);
+        }
+        .overlay-title {
+            font-family: 'Poppins', sans-serif; font-weight: 700;
+            font-size: 26px; color: #ffffff;
+            letter-spacing: -0.04em; line-height: 1.05;
+        }
+        .overlay-description {
+            font-family: 'Poppins', sans-serif; font-weight: 300;
+            font-size: 14px; color: rgba(255,255,255,0.85);
+            letter-spacing: -0.01em; line-height: 1.6;
+        }
+        .start-btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            gap: 12px; background-color: #c20000; color: #ffffff;
+            font-family: 'Poppins', sans-serif; font-weight: 700;
+            font-size: 15px; letter-spacing: 0.04em;
+            padding: 0 30px; height: 50px;
+            border: none; border-radius: 14px; cursor: pointer;
+            text-decoration: none;
+            position: relative; overflow: hidden;
+            box-shadow: 0 10px 30px rgba(194,0,0,0.45);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+            animation: btnGlow 2.6s ease-in-out infinite;
+        }
+        @keyframes btnGlow {
+            0%, 100% { box-shadow: 0 10px 30px rgba(194,0,0,0.4); }
+            50%      { box-shadow: 0 14px 40px rgba(194,0,0,0.65); }
+        }
+        .start-btn::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%);
+            transform: translateX(-120%);
+            transition: transform 0.7s ease;
+        }
+        .start-btn:hover::before { transform: translateX(120%); }
+        .start-btn:hover {
+            background-color: #a30000;
+            transform: translateY(-3px) scale(1.03);
+        }
+        .start-btn:active { transform: translateY(0) scale(0.98); }
+        .start-btn svg {
+            width: 18px; height: 18px; stroke: #ffffff; stroke-width: 2;
+            fill: none; display: block; transition: transform 0.25s ease;
+        }
+        .start-btn:hover svg { transform: translateX(5px); }
+
+        .close-overlay {
+            position: absolute; top: 14px; right: 14px;
+            width: 38px; height: 38px; padding: 0; line-height: 1; border-radius: 50%;
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18);
+            color: #ffffff; font-size: 14px; font-weight: 200;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 10;
+            transition: background 0.25s ease, transform 0.25s ease;
+            backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+        }
+        .close-overlay:hover { background: rgba(255,255,255,0.22); transform: rotate(90deg); }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        footer {
+            width: 100%; text-align: center;
+            padding: 32px 20px 28px;
+            margin-top: auto;
+        }
+        .footer-text {
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: -0.05em; font-weight: 400;
+            font-size: 11px; color: #666666;
+            line-height: 1.7;
+        }
+        .footer-link {
+            color: #c20000; text-decoration: none; font-weight: 600;
+            position: relative; transition: color 0.25s ease;
+            white-space: nowrap;
+        }
+        .footer-link::after {
+            content: ''; position: absolute; left: 0; bottom: -2px;
+            width: 100%; height: 1px; background-color: currentColor;
+            transform: scaleX(0); transform-origin: right;
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .footer-link:hover { color: #a30000; }
+        .footer-link:hover::after { transform: scaleX(1); transform-origin: left; }
+
+        .footer-ig {
+            display: inline-flex; align-items: center; gap: 6px;
+            margin-top: 6px;
+        }
+        .footer-ig svg {
+            width: 14px; height: 14px; stroke: currentColor;
+            stroke-width: 2; fill: none;
+        }
+
+        /* ============================================================
+           DESKTOP
+           ============================================================ */
+        @media (min-width: 768px) {
+            .topbar { padding: 24px 60px; }
+            .logo-title { font-size: 28px; }
+            .speech-balao { width: 40px; }
+            .back-link { font-size: 13px; padding: 8px 16px; }
+
+            .page-hero { padding: 40px 40px 50px; }
+            .page-title { font-size: 48px; }
+            .page-subtitle { font-size: 20px; }
+
+            .tools-section { padding: 20px 60px 60px; }
+
+            .tool-card {
+                padding: 22px 16px 16px;
+                gap: 12px;
+                border-radius: 22px;
+            }
+            .tool-card-art { width: 64%; max-width: 150px; }
+            .tool-card-name { font-size: 15px; }
+
+            .overlay-content {
+                flex-direction: row; gap: 80px;
+                padding: 20px;
+            }
+            .detail-card { width: 300px; height: 300px; padding: 28px; gap: 16px; }
+            .detail-card-art { width: 60%; }
+            .detail-card-name { font-size: 20px; }
+
+            .overlay-info {
+                align-items: flex-start; text-align: left;
+                padding: 0; max-width: 520px; gap: 20px;
+            }
+            .overlay-title { font-size: 48px; }
+            .overlay-description { font-size: 17px; max-width: 460px; }
+            .start-btn { font-size: 17px; height: 56px; padding: 0 36px; }
+
+            .close-overlay { top: 32px; right: 32px; width: 44px; height: 44px; font-size: 16px; }
+
+            footer { padding: 50px 60px 40px; }
+            .footer-text { font-size: 13px; }
+            .footer-ig svg { width: 16px; height: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="loader-screen" id="loaderScreen">
+        <div class="loader-spinner"></div>
+        <p class="loader-text">Separando as ferramentas...</p>
+    </div>
+
+    <div class="topbar">
+        <div class="logo-title-row">
+            <span class="logo-title">Us.digital</span>
+            <img src="../assets/balao.png" alt="Balão de fala" class="speech-balao">
+        </div>
+        <!-- Voltar: ../ resolve para a pasta pai (usdigital/), que serve index.html -->
+        <a href="../" class="back-link">
+            <svg viewBox="0 0 24 24">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Voltar
+        </a>
+    </div>
+
+    <section class="page-hero">
+        <span class="page-kicker">Todas as ferramentas</span>
+        <h1 class="page-title">Tudo o que você precisa para praticar <span class="accent">de graça</span></h1>
+        <p class="page-subtitle">Toque em uma ferramenta para saber mais sobre ela.</p>
+    </section>
+
+    <section class="tools-section">
+        <div class="tools-grid" id="toolsGrid"></div>
+    </section>
+
+    <footer>
+        <p class="footer-text">
+            Feito pela professora · 
+            <a href="https://instagram.com/dicarvalho.prof" target="_blank" rel="noopener noreferrer" class="footer-link">@dicarvalho.prof</a>
+        </p>
+        <p class="footer-text" style="margin-top:4px;">
+            <a href="https://instagram.com/dicarvalho.prof" target="_blank" rel="noopener noreferrer" class="footer-link footer-ig">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+                Seguir no Instagram
+            </a>
+        </p>
+    </footer>
+
+    <!-- OVERLAY -->
+    <div class="overlay" id="overlay">
+        <div class="overlay-backdrop" id="overlayBackdrop">
+            <div class="overlay-aura" id="overlayAura"></div>
+            <div class="overlay-aura secondary" id="overlayAuraSecondary"></div>
+            <div class="overlay-grain"></div>
+        </div>
+
+        <button class="close-overlay" id="closeOverlay" aria-label="Fechar">&#10005;</button>
+
+        <div class="overlay-content">
+            <div class="floating-card-wrapper" id="floatingCardWrapper">
+                <div class="detail-card" id="detailCard">
+                    <img src="" alt="" class="detail-card-art" id="detailCardArt">
+                    <div class="detail-card-name" id="detailCardName"></div>
+                </div>
+            </div>
+
+            <div class="overlay-info">
+                <span class="overlay-kicker">Ferramenta gratuita</span>
+                <h3 class="overlay-title" id="overlayTitle"></h3>
+                <p class="overlay-description" id="overlayDescription"></p>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="start-btn" id="startBtn">
+                    Acessar ferramenta
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ============================================================
+           DADOS DAS FERRAMENTAS
+           art: caminho relativo a partir de tools/ → ../assets/...
+           ============================================================ */
+        const toolsData = [
+            {
+                art: '../assets/card1.png', title: 'Role play',
+                description: 'Simule uma conversa em Inglês em diferentes situações.',
+                link: 'https://dididoingles.github.io/roleplay/home.html',
+                color: '#c20000', auraShadow: 'rgba(120, 0, 0, 0.35)'
+            },
+            {
+                art: '../assets/card2.png', title: 'Grammar',
+                description: 'Treine suas habilidades no present, past and future.',
+                link: 'https://dididoingles.github.io/Storychallenge/',
+                color: '#2b2b2b', auraShadow: 'rgba(15, 15, 15, 0.35)'
+            },
+            {
+                art: '../assets/card3.png', title: 'Leitor Interativo',
+                description: 'Aprenda a pronúncia de qualquer texto.',
+                link: 'https://dididoingles.github.io/leitor/',
+                color: '#c20000', auraShadow: 'rgba(120, 0, 0, 0.35)'
+            },
+            {
+                art: '../assets/card4.png', title: 'YouListen',
+                description: 'Pratique sua compreensão com vídeos curtinhos do YouTube.',
+                link: 'https://dididoingles.github.io/youlisten/',
+                color: '#4a4a4a', auraShadow: 'rgba(35, 35, 35, 0.35)'
+            },
+            {
+                art: '../assets/card5.png', title: 'Você me conhece?',
+                description: 'Versão em Inglês do famoso "Perguntados" para casais.',
+                link: 'https://dididoingles.github.io/couples_trivia/',
+                color: '#c20000', auraShadow: 'rgba(120, 0, 0, 0.35)'
+            },
+            {
+                art: '../assets/card6.png', title: 'Airpaint Beta',
+                description: 'Desenhe usando gestos das mãos via webcam.',
+                link: 'https://dididoingles.github.io/airpaint/',
+                color: '#5a5a5a', auraShadow: 'rgba(40, 40, 40, 0.35)'
+            }
+        ];
+
+        /* ============================================================
+           BUILD GRID
+           ============================================================ */
+        const toolsGrid = document.getElementById('toolsGrid');
+
+        toolsData.forEach((tool, i) => {
+            const card = document.createElement('button');
+            card.type = 'button';
+            card.className = 'tool-card';
+            card.style.setProperty('--aura', tool.color);
+            card.style.setProperty('--aura-shadow', tool.auraShadow);
+            card.style.animationDelay = (i * 0.06) + 's';
+            card.setAttribute('aria-label', 'Abrir detalhes de ' + tool.title);
+
+            const art = document.createElement('img');
+            art.src = tool.art;
+            art.alt = tool.title;
+            art.className = 'tool-card-art';
+            art.loading = 'lazy';
+
+            const name = document.createElement('div');
+            name.className = 'tool-card-name';
+            name.textContent = tool.title;
+
+            card.appendChild(art);
+            card.appendChild(name);
+
+            card.addEventListener('click', () => openOverlay(i));
+
+            toolsGrid.appendChild(card);
+        });
+
+        /* ============================================================
+           OVERLAY
+           ============================================================ */
+        const overlay = document.getElementById('overlay');
+        const overlayBackdrop = document.getElementById('overlayBackdrop');
+        const closeOverlayBtn = document.getElementById('closeOverlay');
+        const detailCard = document.getElementById('detailCard');
+        const detailCardArt = document.getElementById('detailCardArt');
+        const detailCardName = document.getElementById('detailCardName');
+        const floatingCardWrapper = document.getElementById('floatingCardWrapper');
+        const overlayTitle = document.getElementById('overlayTitle');
+        const overlayDescription = document.getElementById('overlayDescription');
+        const overlayAura = document.getElementById('overlayAura');
+        const overlayAuraSecondary = document.getElementById('overlayAuraSecondary');
+        const startBtn = document.getElementById('startBtn');
+
+        let isOverlayOpen = false;
+        let mouseMoveHandler = null;
+
+        function openOverlay(index) {
+            const tool = toolsData[index];
+            const isGray = ['#2b2b2b', '#4a4a4a', '#5a5a5a'].includes(tool.color);
+            const auraColor = isGray ? '#8a8a8a' : tool.color;
+
+            detailCardArt.src = tool.art;
+            detailCardArt.alt = tool.title;
+            detailCardName.textContent = tool.title;
+            overlayTitle.textContent = tool.title;
+            overlayDescription.textContent = tool.description;
+            startBtn.href = tool.link;
+            detailCard.style.setProperty('--aura-shadow', tool.auraShadow);
+
+            overlayAura.style.background = `radial-gradient(circle, ${auraColor} 0%, transparent 70%)`;
+            overlayAuraSecondary.style.background = `radial-gradient(circle, ${auraColor} 0%, transparent 70%)`;
+            floatingCardWrapper.style.setProperty('--aura-color', auraColor);
+
+            overlay.classList.add('active');
+            isOverlayOpen = true;
+
+            floatingCardWrapper.style.transform = 'rotateX(0deg) rotateY(0deg)';
+            mouseMoveHandler = handleMouseMove;
+            document.addEventListener('mousemove', mouseMoveHandler);
+        }
+
+        function closeOverlay() {
+            overlay.classList.remove('active');
+            isOverlayOpen = false;
+            if (mouseMoveHandler) {
+                document.removeEventListener('mousemove', mouseMoveHandler);
+                mouseMoveHandler = null;
+            }
+            floatingCardWrapper.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        }
+
+        function handleMouseMove(e) {
+            if (!isOverlayOpen) return;
+            const cx = window.innerWidth / 2;
+            const cy = window.innerHeight / 2;
+            const dx = (e.clientX - cx) / cx;
+            const dy = (e.clientY - cy) / cy;
+            const max = 10;
+            floatingCardWrapper.style.transform =
+                `rotateX(${-dy * max}deg) rotateY(${dx * max}deg)`;
+        }
+
+        if (overlayBackdrop) overlayBackdrop.addEventListener('click', closeOverlay);
+        if (closeOverlayBtn) closeOverlayBtn.addEventListener('click', closeOverlay);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isOverlayOpen) closeOverlay();
+        });
+
+        /* ============================================================
+           LOADER
+           ============================================================ */
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loaderScreen');
+                if (loader) loader.classList.add('hidden');
+            }, 400);
+        });
+        /* Segurança */
+        setTimeout(() => {
+            const loader = document.getElementById('loaderScreen');
+            if (loader && !loader.classList.contains('hidden')) loader.classList.add('hidden');
+        }, 4000);
+    </script>
+</body>
+</html>
