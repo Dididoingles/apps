@@ -68,6 +68,5 @@ Você pode usar, estudar e praticar com o material. Você não pode vender, redi
 
 Para autorizações, entre em contato pelo Instagram: @dicarvalho.prof
 
-Autora
 Desenvolvido por professora Diandra de Inglês.
 Instagram: @dicarvalho.prof
