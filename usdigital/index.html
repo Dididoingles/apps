@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../favicon.png">
+    <title>Sobre - [US] digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Poppins:wght@100;200;300;400;600;700&family=Raleway:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scrollbar-width: thin; scrollbar-color: rgba(34,34,34,0.22) transparent; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background-color: rgba(34,34,34,0.22); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background-color: rgba(34,34,34,0.45); }
+
+        html, body { width: 100%; overflow-x: hidden; }
+        body {
+            background-color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: -0.05em;
+            min-height: 100vh;
+            color: #222222;
+        }
+
+        /* LOADER (mesmo do index, mais curto) */
+        .loader-screen {
+            position: fixed; inset: 0; background-color: #ffffff;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 24px; z-index: 9999;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        .loader-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader-text {
+            font-family: 'Gochi Hand', cursive; letter-spacing: normal; font-size: 20px;
+            color: #222222; opacity: 0; animation: loaderTextFade 0.8s ease-out 0.2s forwards;
+            text-align: center; padding: 0 24px;
+        }
+        @keyframes loaderTextFade {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 0.75; transform: translateY(0); }
+        }
+        .loader-spinner {
+            width: 48px; height: 48px; border-radius: 50%;
+            border: 3px solid rgba(194,0,0,0.15); border-top-color: #c20000;
+            animation: spinnerRotate 0.9s linear infinite;
+        }
+        @keyframes spinnerRotate { to { transform: rotate(360deg); } }
+
+        /* CONTAINER */
+        .page-container {
+            width: 100%; min-height: 100vh; background-color: #ffffff;
+            display: flex; flex-direction: column; position: relative;
+            overflow: hidden;
+        }
+
+        /* TOPBAR */
+        .topbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 20px; position: relative; z-index: 20;
+        }
+        .logo-title-row { display: flex; align-items: center; gap: 8px; }
+        .logo-title {
+            font-family: 'Poppins', sans-serif; font-weight: 700;
+            letter-spacing: -0.05em; font-size: 22px; color: #c20000; line-height: 1;
+        }
+        .speech-balao { width: 30px; height: auto; }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-family: 'Poppins', sans-serif; font-weight: 500;
+            font-size: 12px; color: #c20000; text-decoration: none;
+            border: 1px solid #c20000; border-radius: 20px;
+            padding: 7px 14px;
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+        }
+        .back-link:hover {
+            background-color: #c20000; color: #ffffff; transform: translateX(-2px);
+        }
+        .back-link svg {
+            width: 12px; height: 12px; stroke: currentColor; stroke-width: 2;
+            fill: none; stroke-linecap: round; stroke-linejoin: round;
+        }
+
+        /* HERO */
+        .hero {
+            position: relative;
+            padding: 40px 20px 30px;
+            display: flex; flex-direction: column; align-items: center;
+            text-align: center; gap: 24px;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -40%; left: 50%;
+            width: 90vmax; height: 90vmax;
+            transform: translateX(-50%);
+            background: radial-gradient(circle, rgba(194,0,0,0.10) 0%, transparent 60%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: auraBreath 10s ease-in-out infinite;
+        }
+        @keyframes auraBreath {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50%      { transform: translateX(-50%) scale(1.12); }
+        }
+        .hero > * { position: relative; z-index: 1; }
+
+        .hero-kicker {
+            display: inline-flex; align-items: center; gap: 10px;
+            font-family: 'Poppins', sans-serif; font-weight: 600;
+            font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
+            color: #c20000;
+            opacity: 0;
+            animation: riseIn 0.8s ease-out 0.2s forwards;
+        }
+        .hero-kicker::before, .hero-kicker::after {
+            content: ''; width: 22px; height: 1px; background: currentColor;
+        }
+
+        .hero-title {
+            font-family: 'Poppins', sans-serif; font-weight: 700;
+            font-size: 24px; color: #222222;
+            letter-spacing: -0.05em; line-height: 1.08;
+            text-align: left;
+            max-width: 720px;
+            opacity: 0;
+            animation: riseIn 1s ease-out 0.35s forwards;
+        }
+        .hero-title .accent { color: #c20000; }
+
+        .hero-subtitle {
+            font-family: 'Gochi Hand', cursive; letter-spacing: normal;
+            font-size: 18px; color: #444444;
+            text-align: left;
+            margin-left: 20px;
+            max-width: 560px; line-height: 1.4;
+            opacity: 0;
+            animation: riseIn 1s ease-out 0.55s forwards;
+        }
+
+        .hero-robot {
+            width: 110px; height: 110px;
+            position: relative;
+            opacity: 0;
+            animation: riseIn 1s ease-out 0.75s forwards;
+        }
+        .hero-robot img {
+            width: 100%; height: 100%; object-fit: contain;
+            filter: drop-shadow(0 12px 24px rgba(194,0,0,0.25));
+            animation: robotFloat 4.5s ease-in-out infinite;
+        }
+        @keyframes robotFloat {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50%      { transform: translateY(-8px) rotate(2deg); }
+        }
+
+        @keyframes riseIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* SEÇÃO GENÉRICA */
+        .section {
+            padding: 40px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .section-title {
+            font-family: 'Poppins', sans-serif; font-weight: 700;
+            font-size: 22px; color: #222222;
+            letter-spacing: -0.04em; line-height: 1.2;
+            margin-bottom: 18px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .section-title::before {
+            content: ''; width: 28px; height: 3px;
+            background: #c20000; border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        /* HISTÓRIA — TIMELINE */
+        .timeline {
+            position: relative;
+            padding-left: 32px;
+            display: flex; flex-direction: column; gap: 32px;
+            margin-top: 8px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px; top: 8px; bottom: 8px;
+            width: 2px;
+            background: linear-gradient(to bottom, #c20000 0%, rgba(194,0,0,0.15) 100%);
+            border-radius: 2px;
+        }
+        .timeline-item {
+            position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1);
+        }
+        .timeline-item.visible {
+            opacity: 1; transform: translateY(0);
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -32px; top: 6px;
+            width: 18px; height: 18px; border-radius: 50%;
+            background: #ffffff;
+            border: 3px solid #c20000;
+            box-shadow: 0 0 0 4px rgba(194,0,0,0.12);
+        }
+        .timeline-item .when {
+            font-family: 'Poppins', sans-serif; font-weight: 600;
+            font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+            color: #c20000; margin-bottom: 6px;
+        }
+        .timeline-item .what {
+            font-family: 'Poppins', sans-serif; font-weight: 700;
+            font-size: 18px; color: #222222;
+            letter-spacing: -0.03em; line-height: 1.25;
+            margin-bottom: 8px;
+        }
+        .timeline-item .desc {
+            font-family: 'Poppins', sans-serif; font-weight: 300;
+            font-size: 14px; color: #555555;
+            letter-spacing: -0.01em; line-height: 1.6;
+        }
+
+        /* PILARES */
+        .pillars {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-top: 8px;
+        }
+        .pillar {
+            background: #ffffff;
+            border: 1px solid rgba(34,34,34,0.08);
+            border-radius: 16px;
+            padding: 22px 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+            transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s ease;
+            opacity: 0; transform: translateY(20px);
+        }
+        .pillar.visible {
+            opacity: 1; transform: translateY(0);
+        }
+        .pillar:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(194,0,0,0.12);
+        }
+        .pillar-icon {
+            width: 44px; height: 44px; border-radius: 12px;
+            background: rgba(194,0,0,0.08);
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 14px;
+        }
+        .pillar-icon svg {
+            width: 22px; height: 22px; stroke: #c20000;
+            stroke-width: 2; fill: none;
+            stroke-linecap: round; stroke-linejoin: round;
+        }
+        .pillar-title {
+            font-family: 'Poppins', sans-serif; font-weight: 700;
+            font-size: 16px; color: #222222;
+            letter-spacing: -0.02em; margin-bottom: 6px;
+        }
+        .pillar-desc {
+            font-family: 'Poppins', sans-serif; font-weight: 300;
+            font-size: 13px; color: #555555;
+            letter-spacing: -0.01em; line-height: 1.6;
+        }
+
+        /* NÚMEROS */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .stat {
+            background: #fafafa;
+            border-radius: 14px;
+            padding: 20px 16px;
+            text-align: center;
+            opacity: 0; transform: translateY(20px);
+            transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1);
+        }
+        .stat.visible { opacity: 1; transform: translateY(0); }
+        .stat-number {
+            font-family: 'Poppins', sans-serif; font-weight: 700;
+            font-size: 28px; color: #c20000;
+            letter-spacing: -0.05em; line-height: 1;
+            margin-bottom: 6px;
+        }
+        .stat-label {
+            font-family: 'Poppins', sans-serif; font-weight: 400;
+            font-size: 11px; color: #666666;
+            letter-spacing: 0.02em; text-transform: uppercase;
+        }
+
+        /* QUOTE */
+        .quote-block {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+            border-left: 4px solid #c20000;
+            border-radius: 14px;
+            padding: 24px 22px;
+            margin-top: 8px;
+            position: relative;
+        }
+        .quote-block::before {
+            content: '"';
+            position: absolute;
+            top: 4px; left: 14px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 60px; color: rgba(194,0,0,0.15);
+            line-height: 1;
+        }
+        .quote-text {
+            font-family: 'Gochi Hand', cursive; letter-spacing: normal;
+            font-size: 18px; color: #222222;
+            line-height: 1.45;
+            position: relative; z-index: 1;
+        }
+        .quote-author {
+            font-family: 'Poppins', sans-serif; font-weight: 600;
+            font-size: 12px; color: #c20000;
+            letter-spacing: 0.05em; text-transform: uppercase;
+            margin-top: 12px;
+        }
+
+        /* CTA FINAL */
+        .cta {
+            background: #222222;
+            border-radius: 20px;
+            padding: 40px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-top: 16px;
+        }
+        .cta::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(194,0,0,0.5) 0%, transparent 55%);
+            pointer-events: none;
+        }
+        .cta > * { position: relative; z-index: 1; }
+        .cta-title {
+            font-family: 'Poppins', sans-serif; font-weight: 700;
+            font-size: 24px; color: #ffffff;
+            letter-spacing: -0.03em; line-height: 1.2;
+            margin-bottom: 10px;
+        }
+        .cta-text {
+            font-family: 'Poppins', sans-serif; font-weight: 300;
+            font-size: 14px; color: rgba(255,255,255,0.78);
+            line-height: 1.6; max-width: 420px;
+            margin: 0 auto 24px;
+        }
+        .cta-btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            gap: 10px;
+            background-color: #c20000; color: #ffffff;
+            font-family: 'Poppins', sans-serif; font-weight: 700;
+            font-size: 14px; letter-spacing: 0.03em;
+            padding: 0 28px; height: 48px;
+            border: none; border-radius: 12px;
+            cursor: pointer; text-decoration: none;
+            box-shadow: 0 8px 24px rgba(194,0,0,0.45);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+            position: relative; overflow: hidden;
+        }
+        .cta-btn::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%);
+            transform: translateX(-120%);
+            transition: transform 0.7s ease;
+        }
+        .cta-btn:hover::before { transform: translateX(120%); }
+        .cta-btn:hover {
+            background-color: #a30000;
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 12px 32px rgba(194,0,0,0.6);
+        }
+        .cta-btn svg {
+            width: 16px; height: 16px; stroke: #ffffff; stroke-width: 2;
+            fill: none; stroke-linecap: round; stroke-linejoin: round;
+            transition: transform 0.25s ease;
+        }
+        .cta-btn:hover svg { transform: translateX(4px); }
+
+        /* FOOTER */
+        footer {
+            width: 100%; text-align: center;
+            padding: 32px 20px 24px;
+            margin-top: 20px;
+        }
+        .footer-text {
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: -0.05em; font-weight: 400;
+            font-size: 11px; color: #666666;
+        }
+        .footer-link {
+            color: #c20000; text-decoration: none; font-weight: 600;
+            position: relative; transition: color 0.25s ease;
+        }
+        .footer-link::after {
+            content: ''; position: absolute; left: 0; bottom: -2px;
+            width: 100%; height: 1px; background-color: currentColor;
+            transform: scaleX(0); transform-origin: right;
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .footer-link:hover { color: #a30000; }
+        .footer-link:hover::after { transform: scaleX(1); transform-origin: left; }
+
+        /* DESKTOP */
+        @media (min-width: 768px) {
+            .topbar { padding: 24px 60px; }
+            .logo-title { font-size: 28px; }
+            .speech-balao { width: 40px; }
+            .back-link { font-size: 13px; padding: 8px 16px; }
+
+            .hero { padding: 60px 60px 40px; gap: 28px; }
+            .hero-title { font-size: 52px; }
+            .hero-subtitle { font-size: 22px; }
+            .hero-robot { width: 150px; height: 150px; }
+
+            .section { padding: 60px 40px; }
+            .section-title { font-size: 28px; margin-bottom: 24px; }
+            .section-title::before { width: 36px; height: 4px; }
+
+            .timeline { padding-left: 40px; gap: 40px; }
+            .timeline::before { left: 10px; }
+            .timeline-item::before { left: -40px; width: 22px; height: 22px; }
+            .timeline-item .what { font-size: 22px; }
+            .timeline-item .desc { font-size: 15px; }
+
+            .pillars { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+            .pillar { padding: 26px 24px; }
+            .pillar-title { font-size: 18px; }
+            .pillar-desc { font-size: 14px; }
+
+            .stats { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+            .stat { padding: 28px 20px; }
+            .stat-number { font-size: 40px; }
+            .stat-label { font-size: 12px; }
+
+            .quote-block { padding: 32px 28px; }
+            .quote-text { font-size: 22px; }
+            .quote-author { font-size: 13px; }
+
+            .cta { padding: 60px 40px; border-radius: 24px; }
+            .cta-title { font-size: 34px; }
+            .cta-text { font-size: 16px; }
+            .cta-btn { font-size: 16px; height: 54px; padding: 0 34px; }
+
+            footer { padding: 40px 60px 30px; }
+            .footer-text { font-size: 13px; }
+        }
+
+        @media (min-width: 1024px) {
+            .section { max-width: 1000px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="loader-screen" id="loaderScreen">
+        <div class="loader-spinner"></div>
+        <p class="loader-text">Carregando a nossa história...</p>
+    </div>
+
+    <div class="page-container">
+
+        <div class="topbar">
+            <div class="logo-title-row">
+                <span class="logo-title">Us.digital</span>
+                <img src="../assets/balao.png" alt="Balão de fala" class="speech-balao">
+            </div>
+            <a href="../" class="back-link">
+                <svg viewBox="0 0 24 24">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Voltar aos apps
+            </a>
+        </div>
+
+        <!-- HERO -->
+        <section class="hero">
+            <span class="hero-kicker">Nossa história</span>
+            <h1 class="hero-title">
+                Começou com aula <span class="accent">gratuita</span>.<br>
+                Hoje é uma iniciativa <span class="accent">digital</span>.
+            </h1>
+            <p class="hero-subtitle">
+                O [US] digital nasceu do desejo de ensinar Inglês para quem não tinha acesso... E cresceu para virar um cantinho na internet cheio de ferramentas gratuitas para você aprender.
+            </p>
+            <div class="hero-robot">
+                <img src="../assets/mars.png" alt="Robô Mars">
+            </div>
+        </section>
+
+        <!-- HISTÓRIA -->
+        <section class="section">
+            <h2 class="section-title">De onde veio tudo isso</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="when">O começo</div>
+                    <div class="what">Aulas de graça nos fins de semana</div>
+                    <div class="desc">
+                        Tudo começou com a professora Diandra ensinando Inglês de graça para alunos carentes aos fins de semana. Sem verba, sem plataforma, sem grandes recursos — só vontade de ensinar e a certeza de que aprender um idioma pode mudar a vida de alguém.
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="when">A virada</div>
+                    <div class="what">A ideia de escalar o que já funcionava</div>
+                    <div class="desc">
+                        As aulas presenciais eram transformadoras, mas o alcance era limitado. Foi aí que surgiu a pergunta: e se essas mesmas ideias pudessem chegar a qualquer pessoa, em qualquer lugar, a qualquer hora?
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="when">Hoje</div>
+                    <div class="what">Uma iniciativa digital gratuita</div>
+                    <div class="desc">
+                        O [US] digital concentra ferramentas criadas pela própria professora Diandra para ajudar as pessoas a aprender Inglês de graça. Role play, gramática, leitura, escuta, jogos — tudo pensado para quem quer praticar sem pagar nada por isso.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PILARES -->
+        <section class="section">
+            <h2 class="section-title">No que acreditamos</h2>
+            <div class="pillars">
+                <div class="pillar">
+                    <div class="pillar-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </div>
+                    <div class="pillar-title">Sempre gratuito</div>
+                    <div class="pillar-desc">
+                        Nenhuma ferramenta aqui tem paywall, login obrigatório ou cobrança escondida. A ideia é que aprender Inglês seja acessível de verdade.
+                    </div>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                        </svg>
+                    </div>
+                    <div class="pillar-title">Feito por professores</div>
+                    <div class="pillar-desc">
+                        Cada ferramenta nasceu da prática real em sala de aula. Nada é genérico: tudo foi testado, ajustado e pensado pedagogicamente.
+                    </div>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-icon">
+                        <svg viewBox="0 0 24 24">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                        </svg>
+                    </div>
+                    <div class="pillar-title">Prática de verdade</div>
+                    <div class="pillar-desc">
+                        Nada de decorar regra. Aqui você simula conversas, escuta vídeos, lê textos e joga — aprendendo Inglês do jeito que funciona.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NÚMEROS (placeholders) -->
+        <section class="section">
+            <h2 class="section-title">O impacto até aqui</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">10+</div>
+                    <div class="stat-label">Ferramentas gratuitas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">80k+</div>
+                    <div class="stat-label">Pessoas alcançadas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Aulas presenciais</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">R$0</div>
+                    <div class="stat-label">Custo para você</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUOTE -->
+        <section class="section">
+            <div class="quote-block">
+                <p class="quote-text">
+                    ...
+                    Ensinar Inglês sempre foi sobre abrir portas para foi historicamente excluído. O US digital é a minha forma de deixar essas portas abertas para todos.
+                </p>
+                <p class="quote-author">— Professora Diandra</p>
+            </div>
+        </section>
+
+        <!-- CTA FINAL -->
+        <section class="section">
+            <div class="cta">
+                <h2 class="cta-title">Curtiu a nossa história?</h2>
+                <p class="cta-text">
+                    Considere apoiar nosso trabalho no Instagram
+                </p>
+                <a href="https://www.instagram.com/dicarvalho.prof/" class="cta-btn">
+                    Seguir a teacher
+                    <svg viewBox="0 0 24 24">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+            </div>
+        </section>
+
+        <footer>
+            <p class="footer-text">
+                Desenvolvido por <a href="https://www.instagram.com/dicarvalho.prof/" target="_blank" rel="noopener noreferrer" class="footer-link">professora Diandra de Inglês</a>
+            </p>
+        </footer>
+
+    </div>
+
+    <script>
+        /* Loader fallback + hide */
+        (function () {
+            const loader = document.getElementById('loaderScreen');
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    if (loader) loader.classList.add('hidden');
+                }, 500);
+            });
+            /* Segurança */
+            setTimeout(() => {
+                if (loader && !loader.classList.contains('hidden')) loader.classList.add('hidden');
+            }, 4000);
+        })();
+
+        /* Reveal on scroll para timeline, pilares e stats */
+        (function () {
+            const items = document.querySelectorAll('.timeline-item, .pillar, .stat');
+            if (!('IntersectionObserver' in window)) {
+                items.forEach(el => el.classList.add('visible'));
+                return;
+            }
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach((entry, i) => {
+                    if (entry.isIntersecting) {
+                        const el = entry.target;
+                        const delay = (Array.from(items).indexOf(el) % 4) * 80;
+                        setTimeout(() => el.classList.add('visible'), delay);
+                        obs.unobserve(el);
+                    }
+                });
+            }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+            items.forEach(el => obs.observe(el));
+        })();
+    </script>
+</body>
+</html>
