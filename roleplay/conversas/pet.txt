@@ -1,0 +1,17 @@
+#mars: Hello! Do you have a pet at home?
+#traducao: Olá! Você tem um animal de estimação em casa?
+#aluno: Yes, I have a dog
+#dica: Tradução: Sim, eu tenho um cachorro.
+
+#mars: That's lovely! What is your pet's name?
+#traducao: Que fofo! Qual é o nome do seu animal de estimação?
+#aluno: His name is Rex
+#dica: Tradução: O nome dele é Rex.
+
+#mars: Great name! What does your pet like to do?
+#traducao: Ótimo nome! O que o seu pet gosta de fazer?
+#aluno: He likes to play in the park
+#dica: Tradução: Ele gosta de brincar no parque.
+
+#mars: Pets are the best! Give him a hug for me. See you next time!
+#traducao: Animais de estimação são os melhores! Dê um abraço nele por mim. Até a próxima!

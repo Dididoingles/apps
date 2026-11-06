@@ -1,0 +1,17 @@
+#mars: Hi again! Let's talk about food. What's your favorite dish?
+#traducao: Olá de novo! Vamos falar sobre comida. Qual é o seu prato favorito?
+#aluno: My favorite dish is pizza
+#dica: Tradução: Meu prato favorito é pizza.
+
+#mars: Pizza is delicious! Do you prefer sweet or savory food?
+#traducao: Pizza é deliciosa! Você prefere comida doce ou salgada?
+#aluno: I prefer savory food
+#dica: Tradução: Eu prefiro comida salgada.
+
+#mars: Nice choice! Can you cook, or do you usually order food?
+#traducao: Boa escolha! Você sabe cozinhar ou costuma pedir comida?
+#aluno: I usually order food
+#dica: Tradução: Eu costumo pedir comida.
+
+#mars: That's very common! Thanks for sharing. See you next time!
+#traducao: Isso é muito comum! Obrigado por compartilhar. Até a próxima!

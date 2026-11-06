@@ -1,0 +1,34 @@
+[
+    {
+      "title": "Intro",
+      "file": "intro.txt",
+      "description": "Conheça o Mars e fale sobre você."
+    },
+    {
+      "title": "Comida favorita",
+      "file": "comidafavorita.txt",
+      "description": "Fale sobre sua comida favorita em Inglês."
+    },
+    
+    {
+      "title": "Viagem",
+      "file": "viagem.txt",
+      "description": "Falando sobre as férias na praia."
+    },
+    {
+        "title": "Melhores amigos",
+        "file": "amigo.txt",
+        "description": "Falando sobre o seu melhor amigo ou amiga."
+      },
+      {
+        "title": "Falando sobre pets",
+        "file": "pet.txt",
+        "description": "Falando sobre seu pet."
+      },
+
+      {
+        "title": "Aleatório",
+        "description": "Responda perguntas aleatórias e receba avaliação.",
+        "redirect": "livre.html"
+      }
+  ]

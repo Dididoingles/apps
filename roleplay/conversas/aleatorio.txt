@@ -1,0 +1,29 @@
+#mars: What did you do last weekend?
+#traducao: O que você fez no último fim de semana?
+
+#mars: Describe your favorite place in your city.
+#traducao: Descreva seu lugar favorito na sua cidade.
+
+#mars: What do you usually do on a typical day?
+#traducao: O que você costuma fazer em um dia típico?
+
+#mars: Tell me about a movie or series you like.
+#traducao: Me conte sobre um filme ou série de que você gosta.
+
+#mars: What is your dream job?
+#traducao: Qual é o seu emprego dos sonhos?
+
+#mars: Do you prefer the beach or the mountains? Why?
+#traducao: Você prefere a praia ou a montanha? Por quê?
+
+#mars: Describe a person you admire.
+#traducao: Descreva uma pessoa que você admira.
+
+#mars: What is something new you would like to learn?
+#traducao: O que você gostaria de aprender de novo?
+
+#mars: How do you spend your free time?
+#traducao: Como você passa seu tempo livre?
+
+#mars: Tell me about your last vacation.
+#traducao: Me conte sobre suas últimas férias.

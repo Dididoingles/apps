@@ -1,0 +1,17 @@
+#mars: Hello! Let's talk about travel. Where did you go on your last vacation?
+#traducao: Olá! Vamos falar sobre viagens. Para onde você foi nas suas últimas férias?
+#aluno: I went to the beach
+#dica: Tradução: Eu fui para a praia.
+
+#mars: That sounds relaxing! Did you travel alone or with your family?
+#traducao: Isso parece relaxante! Você viajou sozinho ou com sua família?
+#aluno: I traveled with my family
+#dica: Tradução: Eu viajei com minha família.
+
+#mars: That's wonderful! What was the best part of your trip?
+#traducao: Que maravilha! Qual foi a melhor parte da sua viagem?
+#aluno: The best part was the food
+#dica: Tradução: A melhor parte foi a comida.
+
+#mars: Food is always a highlight! I hope you travel again soon. Bye for now!
+#traducao: Comida é sempre um ponto alto! Espero que você viaje de novo em breve. Tchau por enquanto!

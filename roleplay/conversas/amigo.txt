@@ -1,0 +1,17 @@
+#mars: Hi! Let's talk about friendship. Who is your best friend?
+#traducao: Oi! Vamos falar sobre amizade. Quem é o seu melhor amigo?
+#aluno: My best friend is [...]
+#dica: Tradução: Meu melhor amigo é a/o [...].
+
+#mars: That's nice! How long have you known each other?
+#traducao: Que legal! Há quanto tempo vocês se conhecem?
+#aluno: We have known each other for ten years
+#dica: Tradução: Nós nos conhecemos há dez anos.
+
+#mars: That's a long time! What do you usually do together?
+#traducao: Isso é bastante tempo! O que vocês costumam fazer juntos?
+#aluno: We usually watch movies together
+#dica: Tradução: Nós costumamos assistir a filmes juntos.
+
+#mars: That sounds fun! Thanks for sharing. See you next time!
+#traducao: Isso parece divertido! Obrigado por compartilhar. Até a próxima!

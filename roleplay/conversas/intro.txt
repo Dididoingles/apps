@@ -1,0 +1,17 @@
+#mars: Hi! I'm Mars. What's your name?
+#traducao: Oi! Eu sou o Mars. Qual é o seu nome?
+#aluno: My name is [...]
+#dica: Tradução: Meu nome é [seu nome]
+
+#mars: Nice to meet you! How are you today?
+#traducao: Prazer em te conhecer! Como você está hoje?
+#aluno: I am fine, thank you!
+#dica: Tradução: Eu estou bem, obrigado!
+
+#mars: That's great! Do you like learning English?
+#traducao: Que ótimo! Você gosta de aprender Inglês?
+#aluno: Yes, I do
+#dica: Tradução: Sim, eu gosto.
+
+#mars: Awesome! Keep practicing every day. See you next time!
+#traducao: Incrível! Continue praticando todo dia. Até a próxima!
